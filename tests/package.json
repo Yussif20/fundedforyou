@@ -1,0 +1,13 @@
+{
+  "name": "ffy-ui-tests",
+  "version": "1.0.0",
+  "description": "Puppeteer UI tests for Funded For You",
+  "type": "commonjs",
+  "scripts": {
+    "test": "node ui.test.js",
+    "test:headed": "node ui.test.js --headed"
+  },
+  "dependencies": {
+    "puppeteer": "^22.0.0"
+  }
+}
