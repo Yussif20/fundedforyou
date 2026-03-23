@@ -1,4 +1,4 @@
-# Server — Funded For You
+# Server — Funded For You (Monorepo)
 
 Express 5 REST API with TypeScript, Prisma ORM, and PostgreSQL.
 
