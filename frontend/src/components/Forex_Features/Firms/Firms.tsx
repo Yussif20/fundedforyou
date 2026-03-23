@@ -134,7 +134,7 @@ export default function Firms({
         <div className="flex-1 min-w-0 space-y-8">
           <div className="w-full flex flex-col lg:flex-row gap-3 lg:gap-5 items-end overflow-x-clip">
             {/* Mobile: Search + Customize + Filter in one row, centered */}
-            <div className="w-full flex flex-row-reverse items-center justify-center gap-2 lg:hidden">
+            <div className="w-full flex flex-row items-center justify-center gap-2 lg:hidden">
               <FirmsFilter />
               <CustomizeColumnsDialog
                 columns={columns}
