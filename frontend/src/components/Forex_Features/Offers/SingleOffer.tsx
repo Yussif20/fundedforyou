@@ -328,7 +328,7 @@ export default function SingleOffer(props: {
   return (
     <Card
       className={cn(
-        "border border-border rounded-xl p-4 sm:p-5 lg:p-6 bg-card flex flex-col gap-4 lg:gap-6 lg:justify-center relative overflow-hidden lg:h-[210px]",
+        "border border-border rounded-xl p-4 sm:p-5 lg:p-6 bg-card flex flex-col gap-4 lg:gap-6 justify-center lg:justify-center relative overflow-hidden h-[385px] lg:h-[210px]",
         onlyShowMatch && "border-none rounded-none bg-background px-0!"
       )}
     >
