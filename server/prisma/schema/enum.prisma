@@ -1,0 +1,23 @@
+enum StepsEnum {
+    STEP1
+    STEP2
+    STEP3
+    STEP4
+    INSTANT
+}
+
+enum DiscountTypeEnum {
+    PERCENTAGE
+    TEXT
+}
+
+enum PayoutReqEnum {
+    ON_DEMAND
+    DAYS_7
+    DAYS_14
+    DAYS_21
+    DAYS_30
+    BI_WEEKLY
+    IMMEDIATE
+    ON_DEMAND_THEN_EVERY_7_DAYS
+}

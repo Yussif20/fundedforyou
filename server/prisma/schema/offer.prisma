@@ -1,0 +1,32 @@
+model Offer {
+    id String @id @default(uuid())
+
+    code            String?
+    offerPercentage Float
+    discountType      DiscountTypeEnum @default(PERCENTAGE)
+    discountText      String @default("")
+    discountTextArabic String @default("")
+    isExclusive     Boolean   @default(false)
+    text            String    @default("")
+    textArabic      String    @default("")
+    showGift        Boolean   @default(false)
+    giftText        String?
+    giftTextArabic  String?
+    endDate                DateTime?
+    timerCode              String?
+    timerOfferPercentage   Float?
+    timerDiscountType      DiscountTypeEnum?
+    timerDiscountText      String?
+    timerDiscountTextArabic String?
+    timerText              String?
+    timerTextArabic        String?
+
+    firmId    String
+    firm      Firm    @relation(fields: [firmId], references: [id])
+    hidden       Boolean @default(false)
+    showInBanner Boolean @default(false)
+    isDeleted    Boolean @default(false)
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}

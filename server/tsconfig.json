@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "jsx": "react",
+    "target": "ES2020",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "esModuleInterop": true,
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "baseUrl": "./", // Add this
+    "paths": {
+      "@/db": ["src/lib/db/db"],
+      "@/routes/*": ["src/routes/*"],
+      "@/ResponseMessages/*": ["src/ResponseMessages/*"],
+      "@/*": ["src/*"] // Make it relative
+    }
+  },
+  "include": ["src", "src/**/*.ts"],
+  "exclude": ["node_modules"]
+}

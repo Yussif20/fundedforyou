@@ -1,0 +1,61 @@
+model ChallengeName {
+    id                 String      @id @default(uuid())
+    name               String
+    nameArabic         String      @default("")
+    discountPercentage Float       @default(0)
+    order              Int         @default(0)
+    cnMaxAllocation          Int      @default(0)
+    cnConsistencyRules       Float    @default(0)
+    cnNewsTrading            Boolean  @default(false)
+    cnOvernightWeekends      Boolean  @default(false)
+    cnCopyTrading            Boolean  @default(false)
+    cnExperts                Boolean  @default(false)
+    cnMinimumTradingDays     String   @default("")
+    cnMinimumTradingDaysArabic String @default("")
+    firmId             String
+    firm               Firm        @relation(fields: [firmId], references: [id])
+    challenges         Challenge[]
+    isDeleted          Boolean     @default(false)
+    createdAt          DateTime    @default(now())
+    updatedAt          DateTime    @updatedAt
+}
+
+model Challenge {
+    id                    String    @unique @default(uuid())
+    firmId                String
+    firm                  Firm      @relation(fields: [firmId], references: [id])
+    title                 String
+    affiliateLink         String    @default("")
+    resetType             String    @default("Daily")
+    challengeName         String    @default("")
+    challengeNameId       String?
+    challengeNameRel      ChallengeName? @relation(fields: [challengeNameId], references: [id])
+    accountSize           Float
+    steps                 StepsEnum
+    profitTarget          Float[]
+    dailyLoss             Float
+    maxLoss               Float
+    maxLostType           String?   @default("")
+    profitSplit           Int
+    payoutFrequency       String?   @default("")
+    payoutFrequencyArabic String?   @default("")
+    price                 Float
+    minTradingDays        Int
+    timeLimit             Int
+    maxLeverage           String
+    activationFees        Float?    @default(0)
+    order                 Int?      @default(0)
+
+    newsTrading      Boolean
+    copyTrading      Boolean
+    EAs              Boolean
+    weekend          Boolean
+    overnightHolding Boolean
+    stopLossRequired Boolean
+    refundableFee    Boolean
+
+    hidden    Boolean  @default(false)
+    isDeleted Boolean  @default(false)
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}

@@ -1,0 +1,55 @@
+model Spread {
+  id         String   @id @default(uuid())
+  platformId String
+  platform   Platform @relation(fields: [platformId], references: [id])
+
+  firmId    String
+  firm      Firm    @relation(fields: [firmId], references: [id])
+  isDeleted Boolean @default(false)
+
+  type SpreadType
+
+  spreadSymbolValues SpreadSymbolValue[]
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+
+  @@index([firmId, type])
+}
+
+model SpreadSymbolValue {
+  id       String @id @default(uuid())
+  symbolId String
+  spreadId String
+  maxValue Float
+  minValue Float
+
+  symbol Symbol @relation(fields: [symbolId], references: [id])
+  spread Spread @relation(fields: [spreadId], references: [id])
+
+  isDeleted Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([symbolId, spreadId])
+}
+
+model Symbol {
+  id String @id @default(uuid())
+
+  countries String[]
+
+  isDeleted          Boolean             @default(false)
+  spreadSymbolValues SpreadSymbolValue[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum SpreadType {
+  POPULAR
+  FOREX
+  CRYPTO
+  INDICES
+  METALS
+}

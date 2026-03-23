@@ -1,0 +1,59 @@
+name: Deploy Frontend
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - "frontend/**"
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.9.0
+          cache: "npm"
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Upload build to VPS
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          source: "frontend/"
+          target: ${{ secrets.VPS_APP_PATH }}
+          rm: true
+          strip_components: 1
+
+      - name: create env file
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            cd ${{ secrets.VPS_APP_PATH }}
+
+            echo "NEXT_PUBLIC_GOOGLE_CLIENT_ID=${{secrets.NEXT_PUBLIC_GOOGLE_CLIENT_ID}}" >> .env.production
+
+      - name: Build and restart server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            cd ${{ secrets.VPS_APP_PATH }}
+
+            npm install
+            NODE_ENV=production npm run build
+
+            pm2 delete frontend
+            pm2 start /var/www/app/ecosystem.config.js

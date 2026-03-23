@@ -1,0 +1,1 @@
+// Define NewsLetter interfaces here

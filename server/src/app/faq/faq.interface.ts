@@ -1,0 +1,1 @@
+// Define FAQ interfaces here

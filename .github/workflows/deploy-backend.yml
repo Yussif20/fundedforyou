@@ -1,0 +1,99 @@
+name: Build & Deploy Backend
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "server/**"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout repository
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      # Setup Node.js
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24.13.0
+
+      # Install dependencies
+      - name: Install dependencies
+        run: npm ci
+        working-directory: server
+
+      # Generate Prisma Client
+      - name: Generate Prisma Client
+        run: npm run prisma:gen
+        working-directory: server
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          NODE_ENV: ${{ secrets.NODE_ENV }}
+          JWT_ACCESS_SECRET: ${{ secrets.JWT_ACCESS_SECRET }}
+          JWT_REFRESH_SECRET: ${{ secrets.JWT_REFRESH_SECRET }}
+
+      # Build TypeScript project
+      - name: Build
+        run: npm run build
+        working-directory: server
+
+      - name: Check dist folder
+        run: ls -la dist
+        working-directory: server
+
+      # Ensure server folder exists on VPS
+      - name: Ensure server folder exists
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            mkdir -p ${{ secrets.VPS_PATH }}/server
+
+      # Clean old dist folder
+      - name: Clean old dist
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            rm -rf ${{ secrets.VPS_PATH }}/server/dist
+
+      - name: Delete running PM2 Backend
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            pm2 delete backend
+
+      # Upload new dist folder
+      - name: Upload dist
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          source: "server/"
+          target: ${{ secrets.VPS_PATH }}/server
+          rm: true
+          debug: true
+          strip_components: 1
+
+      # Restart PM2
+      - name: Start new PM2 Backend
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            systemctl restart backend

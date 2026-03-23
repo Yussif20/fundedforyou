@@ -1,0 +1,22 @@
+model BestSeller {
+    id String @id @default(uuid())
+
+    type        BestSellerTypeEnum?
+    weeklyRank  Int
+    monthlyRank Int
+    rank        Int
+
+    firmId String
+    firm   Firm   @relation(fields: [firmId], references: [id])
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@unique([firmId])
+    @@index([firmId])
+}
+
+enum BestSellerTypeEnum {
+    CRYPTO
+    STOCK
+}

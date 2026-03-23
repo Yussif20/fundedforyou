@@ -1,0 +1,192 @@
+model Firm {
+    id                  String          @id @default(uuid())
+    index               Int             @default(0)
+    slug                String          @unique
+    firmType            FirmTypeEnum
+    title               String
+    dateEstablished     DateTime?
+    ceo                 String          @default("")
+    hidden              Boolean         @default(false)
+    brokers             Broker[]
+    platforms           Platform[]      @relation("FirmPlatforms")
+    paymentMethods      PaymentMethod[] @relation("PaymentsOnFirm")
+    payoutMethods       PaymentMethod[] @relation("PayoutsOnFirm")
+    restrictedCountries            String[]
+    restrictedCountriesNote        String @default("")
+    restrictedCountriesNoteArabic  String @default("")
+    countries                      String[]
+    typeOfInstruments   String[]
+
+    payoutPolicy       String @default("")
+    payoutPolicyArabic String @default("")
+
+    consistencyRules       String @default("")
+    consistencyRulesArabic String @default("")
+
+    affiliateLink    String
+    maxAllocation    Int         @default(0)
+    country          String      @default("Kuwait")
+    programTypes     StepsEnum[] @default([STEP1])
+    leverage         String?     @default("")
+    leverageArabic   String?     @default("")
+    commission       String?     @default("")
+    commissionArabic String?     @default("")
+    drawDown         String?     @default("")
+    drawDownArabic   String?     @default("")
+    drawDowns        String[]
+    drawDownTexts           Json[]
+    drawDownProgramTypeMap  Json     @default("{}")
+    otherFeatures    String[]
+    challengeNames   String[]
+    isPopular        Boolean     @default(false)
+    inNew            Boolean     @default(false)
+    logoUrl          String
+
+    accountSizes             String? @default("")
+    accountSizesArabic       String? @default("")
+    dailyMaxLoss             String? @default("")
+    dailyMaxLossArabic       String? @default("")
+    minimumTradingDays       String? @default("")
+    minimumTradingDaysArabic String? @default("")
+    scaleupPlans             String? @default("")
+    scaleupPlansArabic       String? @default("")
+
+    allocationRules       String @default("")
+    allocationRulesArabic String @default("")
+
+    newsTradingAllowedRules       String @default("")
+    newsTradingAllowedRulesArabic String @default("")
+
+    newsTradingNotAllowedRules       String @default("")
+    newsTradingNotAllowedRulesArabic String @default("")
+
+    overnightAndWeekendsHolding       String @default("")
+    overnightAndWeekendsHoldingArabic String @default("")
+
+    copyTradingAllowedRules       String @default("")
+    copyTradingAllowedRulesArabic String @default("")
+
+    copyTradingNotAllowedRules       String @default("")
+    copyTradingNotAllowedRulesArabic String @default("")
+
+    expertsAllowedRules       String @default("")
+    expertsAllowedRulesArabic String @default("")
+
+    expertsNotAllowedRules       String @default("")
+    expertsNotAllowedRulesArabic String @default("")
+
+    riskManagement       String @default("")
+    riskManagementArabic String @default("")
+
+    vpnVps       String @default("")
+    vpnVpsArabic String @default("")
+
+    profitShare       String @default("")
+    profitShareArabic String @default("")
+
+    inactivityRules       String @default("")
+    inactivityRulesArabic String @default("")
+
+    prohibitedStrategies       String @default("")
+    prohibitedStrategiesArabic String @default("")
+
+    leverageMobileFontSize                   Int?
+    commissionMobileFontSize                 Int?
+    accountSizesMobileFontSize               Int?
+    allocationRulesMobileFontSize            Int?
+    dailyMaxLossMobileFontSize               Int?
+    riskManagementMobileFontSize             Int?
+    consistencyRulesMobileFontSize           Int?
+    minimumTradingDaysMobileFontSize         Int?
+    newsTradingAllowedRulesMobileFontSize    Int?
+    newsTradingNotAllowedRulesMobileFontSize Int?
+    overnightAndWeekendsHoldingMobileFontSize Int?
+    copyTradingAllowedRulesMobileFontSize    Int?
+    copyTradingNotAllowedRulesMobileFontSize Int?
+    expertsAllowedRulesMobileFontSize        Int?
+    expertsNotAllowedRulesMobileFontSize     Int?
+    vpnVpsMobileFontSize                     Int?
+    profitShareMobileFontSize                Int?
+    payoutPolicyMobileFontSize               Int?
+    scaleupPlansMobileFontSize               Int?
+    inactivityRulesMobileFontSize            Int?
+    prohibitedStrategiesMobileFontSize       Int?
+    restrictedCountriesNoteMobileFontSize    Int?
+
+    challengeNameRecords ChallengeName[]
+    offers        Offer[]
+    spreads       Spread[]
+    challenges    Challenge[]
+    announcements Announcements[]
+    bestSeller    BestSeller?
+
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+    isDeleted Boolean   @default(false)
+    deletedAt DateTime?
+
+    @@unique([slug, firmType])
+    @@index([title])
+}
+
+model Platform {
+    id String @id @default(uuid())
+
+    title     String
+    logoUrl   String
+    firms     Firm[]   @relation("FirmPlatforms")
+    spreads   Spread[]
+    isDeleted Boolean  @default(false)
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model Broker {
+    id String @id @default(uuid())
+
+    title     String
+    logoUrl   String
+    firms     Firm[]
+    isDeleted Boolean @default(false)
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model PaymentMethod {
+    id String @id @default(uuid())
+
+    title   String
+    logoUrl String
+
+    isDeleted Boolean @default(false)
+
+    paymentsOnFirm Firm[] @relation("PaymentsOnFirm")
+    payoutsOnFirm  Firm[] @relation("PayoutsOnFirm")
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model Announcements {
+    id String @id @default(uuid())
+
+    title        String
+    description  String
+    thumbnailUrl String
+    redirectUrl    String   @default("")
+    date           DateTime
+    mobileFontSize Int?
+
+    firmId String
+    firm   Firm   @relation(fields: [firmId], references: [id])
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+enum FirmTypeEnum {
+    FOREX
+    FUTURES
+}

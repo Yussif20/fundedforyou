@@ -1,0 +1,12 @@
+model News {
+    id          String   @id @default(uuid())
+    dateAndTime DateTime
+    currency    String
+    title       String
+    titleArabic String
+    order       Int?     @default(0)
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+
+    @@map("news")
+}

@@ -1,0 +1,151 @@
+// Email and phoneNumber are unique only among non-deleted users (enforced by partial unique indexes in migration).
+model User {
+  id       String       @id @default(uuid())
+  email    String
+  fullName String
+  password String?
+  role     UserRoleEnum @default(USER)
+
+  phoneNumber String?
+  status      UserStatus @default(ACTIVE)
+  bio         String?    @default("")
+
+  location                      String?     @default("")
+  profile                       String?     @default("")
+  isAgreeWithTerms              Boolean     @default(true)
+  isEmailVerified               Boolean     @default(false)
+  emailVerificationToken        String?     @default("")
+  emailVerificationTokenExpires DateTime?
+  resetPasswordToken            String?     @default("")
+  resetPasswordTokenExpires     DateTime?
+  magicLinks                    MagicLink[]
+
+  tookChallenge     String   @default("")
+  tradingExperience String?  @default("")
+  assetsTraded      String[]
+  country           String   @default("")
+  hasTakenSurvey    Boolean  @default(false)
+
+  notifications     NotificationUser[]
+  payments          Payment[]
+  otps              UserOTP[]          @relation("UserToUserOTPs")
+  authType          AuthType
+  refreshTokens     RefreshToken[]
+  contactUsRequests ContactUs[]
+  accessTokens      AccessTokens[]
+
+  isAggradedToTermsAndPolicies Boolean
+  isConsentToReceiveEmails     Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+model UserDevices {
+  id              String  @id @default(ulid())
+  userId          String
+  deviceSessionId String  @unique
+  userAgent       String  @default("")
+  deviceName      String? @default("")
+  ip              String? @default("")
+
+  lastActive DateTime @updatedAt
+  location   String?  @default("")
+  createdAt  DateTime @default(now())
+}
+
+model UserOTP {
+  id        String         @id @default(ulid()) @map("_id")
+  userId    String
+  code      String
+  purpose   OTPPurposeEnum
+  expiresAt DateTime
+  verified  Boolean        @default(false)
+  createdAt DateTime       @default(now())
+  user      User           @relation("UserToUserOTPs", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, purpose])
+  @@map("user_otps")
+}
+
+model MagicLink {
+  id        String               @id @default(uuid())
+  userId    String
+  token     String               @unique
+  purpose   MagicLinkPurposeEnum
+  expiresAt DateTime
+  verified  Boolean              @default(false)
+  createdAt DateTime             @default(now())
+  user      User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, purpose])
+  @@map("magic_links")
+}
+
+model RefreshToken {
+  id         String         @id @default(cuid())
+  token      String         @unique
+  userId     String
+  expiresAt  DateTime
+  revoked    Boolean        @default(false)
+  createdAt  DateTime       @default(now())
+  user       User           @relation(fields: [userId], references: [id])
+  clientType ClientTypeEnum @default(MOBILE)
+
+  @@unique([userId, token])
+}
+
+model AccessTokens {
+  id         String         @id @default(cuid())
+  token      String         @unique
+  userId     String
+  expiresAt  DateTime
+  revoked    Boolean        @default(false)
+  createdAt  DateTime       @default(now())
+  user       User           @relation(fields: [userId], references: [id])
+  clientType ClientTypeEnum @default(MOBILE)
+
+  @@unique([userId, token])
+}
+
+enum ClientTypeEnum {
+  WEB
+  MOBILE
+}
+
+enum MagicLinkPurposeEnum {
+  SIGNUP
+  LOGIN
+  EMAIL_VERIFICATION
+  PASSWORD_RESET
+}
+
+enum UserRoleEnum {
+  USER
+  MODERATOR
+  SUPER_ADMIN
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+  BLOCKED
+  DELETED
+}
+
+enum OTPPurposeEnum {
+  SIGNUP
+  PASSWORD_RESET
+  EMAIL_VERIFICATION
+  PHONE_VERIFICATION
+  TWO_FACTOR_AUTH
+}
+
+enum AuthType {
+  EMAIL
+  GOOGLE
+  OTP
+  OTHER
+}

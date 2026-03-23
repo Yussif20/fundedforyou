@@ -11,15 +11,37 @@ nul
 .env
 .env.local
 .env.*local
+.env.development.local
+.env.test.local
+.env.production.local
 
 # dependencies
 node_modules/
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
 
 # build outputs
 .next/
 dist/
 build/
 out/
+coverage/
+
+# server specific
+server/upload/
+server/.upload
+server/src/generated/prisma
+
+# misc
+*.pem
+*.tsbuildinfo
+next-env.d.ts
+.vercel
 
 # archives
 *.tar.gz
@@ -28,6 +50,11 @@ out/
 # debug logs
 npm-debug.log*
 yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
 
 # Claude Code
 .claude/
+
+# Database backups
+*.backup
