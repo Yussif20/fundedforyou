@@ -43,7 +43,7 @@ function Table({ className, containerClassName, ...props }: React.ComponentProps
       }
 
       setThumbWidth(tw);
-      setThumbLeft(scrollRatio * maxThumbLeft);
+      setThumbLeft(isRTL() ? (1 - scrollRatio) * maxThumbLeft : scrollRatio * maxThumbLeft);
     };
 
     update();
@@ -73,7 +73,7 @@ function Table({ className, containerClassName, ...props }: React.ComponentProps
     const maxScroll = scrollWidth - clientWidth;
     const ratio = clickX / trackW;
     const rtl = getComputedStyle(container).direction === "rtl";
-    container.scrollLeft = rtl ? -(ratio * maxScroll) : ratio * maxScroll;
+    container.scrollLeft = rtl ? -((1 - ratio) * maxScroll) : ratio * maxScroll;
   };
 
   const handleThumbMouseDown = (e: React.MouseEvent) => {
@@ -95,7 +95,7 @@ function Table({ className, containerClassName, ...props }: React.ComponentProps
       const scrollRatio = newLeft / maxThumbLeft;
       const maxScroll = container.scrollWidth - container.clientWidth;
       const rtl = getComputedStyle(container).direction === "rtl";
-      container.scrollLeft = rtl ? -(scrollRatio * maxScroll) : scrollRatio * maxScroll;
+      container.scrollLeft = rtl ? -((1 - scrollRatio) * maxScroll) : scrollRatio * maxScroll;
     };
 
     const handleMouseUp = () => {
