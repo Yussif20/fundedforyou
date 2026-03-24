@@ -48,7 +48,6 @@ type ChallengeNameItem = {
   nameArabic: string;
   discountPercentage: number;
   cnMaxAllocation: number | string;
-  cnConsistencyRules: number | string;
   cnNewsTrading: boolean;
   cnOvernightWeekends: boolean;
   cnCopyTrading: boolean;
@@ -203,7 +202,7 @@ function ChallengeNamesField() {
     if (!trimmed) return;
     const current: ChallengeNameItem[] = getValues("challengeNames") || [];
     if (!current.some((cn) => cn.name === trimmed)) {
-      setValue("challengeNames", [...current, { name: trimmed, nameArabic: "", discountPercentage: 0, cnMaxAllocation: "", cnConsistencyRules: "", cnNewsTrading: false, cnOvernightWeekends: false, cnCopyTrading: false, cnExperts: false, cnMinimumTradingDays: "", cnMinimumTradingDaysArabic: "" }]);
+      setValue("challengeNames", [...current, { name: trimmed, nameArabic: "", discountPercentage: 0, cnMaxAllocation: "", cnNewsTrading: false, cnOvernightWeekends: false, cnCopyTrading: false, cnExperts: false, cnMinimumTradingDays: "", cnMinimumTradingDaysArabic: "" }]);
     }
     setInput("");
   };
@@ -395,13 +394,6 @@ function SingleChallengeNameSection({ idx }: { idx: number }) {
           name={`challengeNames.${idx}.cnMaxAllocation`}
           fieldClassName="h-11"
           placeholder={t("cnMaxAllocation")}
-        />
-        <CustomInput
-          type="number"
-          label={t("cnConsistencyRules")}
-          name={`challengeNames.${idx}.cnConsistencyRules`}
-          fieldClassName="h-11"
-          placeholder={t("cnConsistencyRules")}
         />
         <CustomInput
           type="text"

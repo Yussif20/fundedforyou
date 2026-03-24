@@ -57,7 +57,7 @@ export const defaultValues = {
   drawDownTexts: [],
   drawDownProgramTypeMap: {} as Record<string, string[]>,
   otherFeatures: [],
-  challengeNames: [] as Array<{id?: string; name: string; nameArabic: string; discountPercentage: number; cnMaxAllocation: number | string; cnConsistencyRules: number | string; cnNewsTrading: boolean; cnOvernightWeekends: boolean; cnCopyTrading: boolean; cnExperts: boolean; cnMinimumTradingDays: string; cnMinimumTradingDaysArabic: string}>,
+  challengeNames: [] as Array<{id?: string; name: string; nameArabic: string; discountPercentage: number; cnMaxAllocation: number | string; cnNewsTrading: boolean; cnOvernightWeekends: boolean; cnCopyTrading: boolean; cnExperts: boolean; cnMinimumTradingDays: string; cnMinimumTradingDaysArabic: string}>,
   programTypes: [StepsEnum.STEP1],
 
   allocationRules: "",
@@ -145,7 +145,6 @@ export const AddFirmDialog = () => {
       challengeNames: (data.challengeNames || []).map((cn: any) => ({
         ...cn,
         cnMaxAllocation: Number(cn.cnMaxAllocation) || 0,
-        cnConsistencyRules: Number(cn.cnConsistencyRules) || 0,
       })),
       programTypes: data.programTypes,
       affiliateLink: data.affiliateLink,

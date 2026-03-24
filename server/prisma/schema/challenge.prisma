@@ -5,7 +5,6 @@ model ChallengeName {
     discountPercentage Float       @default(0)
     order              Int         @default(0)
     cnMaxAllocation          Int      @default(0)
-    cnConsistencyRules       Float    @default(0)
     cnNewsTrading            Boolean  @default(false)
     cnOvernightWeekends      Boolean  @default(false)
     cnCopyTrading            Boolean  @default(false)

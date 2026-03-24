@@ -38,7 +38,6 @@ type ChallengeNameRecord = {
   discountPercentage: number;
   order: number;
   cnMaxAllocation: number;
-  cnConsistencyRules: number;
   cnNewsTrading: boolean;
   cnOvernightWeekends: boolean;
   cnCopyTrading: boolean;
@@ -164,17 +163,6 @@ export default function ComparisonPage() {
         cn ? (
           <span className="font-semibold text-base">
             {formatK(cn.cnMaxAllocation)}
-          </span>
-        ) : (
-          <span className="text-muted-foreground">-</span>
-        ),
-    },
-    {
-      label: t("consistencyRules"),
-      render: (cn) =>
-        cn ? (
-          <span className="font-semibold text-base">
-            {cn.cnConsistencyRules}%
           </span>
         ) : (
           <span className="text-muted-foreground">-</span>

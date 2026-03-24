@@ -84,7 +84,6 @@ export const EditFirmDialog = ({ firmId }: EditFirmDialogProps) => {
           nameArabic: cn.nameArabic || "",
           discountPercentage: cn.discountPercentage || 0,
           cnMaxAllocation: cn.cnMaxAllocation || "",
-          cnConsistencyRules: cn.cnConsistencyRules || "",
           cnNewsTrading: cn.cnNewsTrading ?? false,
           cnOvernightWeekends: cn.cnOvernightWeekends ?? false,
           cnCopyTrading: cn.cnCopyTrading ?? false,
@@ -201,7 +200,6 @@ export const EditFirmDialog = ({ firmId }: EditFirmDialogProps) => {
       challengeNames: (data.challengeNames || []).map((cn: any) => ({
         ...cn,
         cnMaxAllocation: Number(cn.cnMaxAllocation) || 0,
-        cnConsistencyRules: Number(cn.cnConsistencyRules) || 0,
       })),
       programTypes: data.programTypes,
       affiliateLink: data.affiliateLink,
