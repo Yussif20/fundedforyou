@@ -8,7 +8,6 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import useIsArabic from "@/hooks/useIsArabic";
-import { Badge } from "@/components/ui/badge";
 import {
   Card,
   CardContent,
@@ -143,18 +142,15 @@ export default function ComparisonPage() {
   const BooleanCell = ({ value }: { value: boolean | null }) => {
     if (value === null) return <span className="text-muted-foreground">-</span>;
     return value ? (
-      <Badge className="gap-1 bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/20 hover:bg-emerald-500/15">
+      <span className="flex items-center justify-center gap-1 font-semibold text-green-500 drop-shadow-[0_0_8px_rgba(34,197,94,0.6)]">
         <Check className="size-3" />
         {t("allowed")}
-      </Badge>
+      </span>
     ) : (
-      <Badge
-        variant="outline"
-        className="gap-1 text-muted-foreground border-muted-foreground/20"
-      >
+      <span className="flex items-center justify-center gap-1 font-semibold text-red-500 drop-shadow-[0_0_8px_rgba(239,68,68,0.6)]">
         <Ban className="size-3" />
         {t("notAllowed")}
-      </Badge>
+      </span>
     );
   };
 

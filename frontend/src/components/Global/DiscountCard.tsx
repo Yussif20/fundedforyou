@@ -52,7 +52,7 @@ export default function DiscountCard({
     <div className="flex justify-center items-center">
       <div
         onClick={handleCopy}
-        className="inline-flex flex-col items-center gap-1.5 px-3.5 py-2 rounded-xl
+        className="w-[100px] h-[60px] flex flex-col items-center justify-center gap-1.5 px-3.5 rounded-xl
           bg-gradient-to-b from-primary/90 to-primary/60
           border border-primary/40 shadow-sm shadow-primary/20
           cursor-pointer select-none
@@ -66,7 +66,7 @@ export default function DiscountCard({
           )}
         >
           {isTextType ? (
-            <span className="text-sm font-bold">{textContent}</span>
+            <span className="text-xs font-bold">{textContent}</span>
           ) : (
             <>
               <span className="text-base font-bold tabular-nums">{discount.offerPercentage}%</span>

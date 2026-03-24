@@ -123,7 +123,7 @@ function OfferPercentageBadge({
         "group/badge relative flex flex-col items-center justify-center overflow-hidden",
         isSubtle
           ? "rounded-xl w-[76px] min-w-[76px] py-3"
-          : "rounded-2xl w-full min-w-0 py-5 sm:py-6 lg:min-w-[110px] lg:w-[110px] lg:h-[110px]",
+          : "rounded-2xl w-[130px] min-w-0 h-[110px] lg:min-w-[110px] lg:w-[110px] lg:h-[110px]",
         // Glassy white background
         "bg-gradient-to-br from-white/[0.22] via-white/[0.15] to-white/[0.10]",
         "backdrop-blur-2xl",

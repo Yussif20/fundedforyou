@@ -42,6 +42,18 @@ export default function ChallengeFilter({
   const filterOpen = searchParams.get("filterOpen") === "true";
   const isArabic = useIsArabic();
 
+  const FILTER_KEYS = [
+    "in_firmId", "countries", "paymentMethods", "payoutMethods",
+    "drawdown", "otherFeatures", "programType", "platforms", "range_maxAllocation",
+  ];
+  const activeFilterCount = FILTER_KEYS.filter((key) => {
+    const val = searchParams.get(key);
+    if (!val) return false;
+    if (key === "range_maxAllocation") return val !== "100000,6000000";
+    return true;
+  }).length;
+  const hasActiveFilters = activeFilterCount > 0;
+
   const [openModal, setOpenModal] = useState(false);
   // Pre-mark defaults as applied when the server already passed them in initialSearchParams
   const serverHasDefaults = Boolean(
@@ -147,7 +159,8 @@ export default function ChallengeFilter({
             <Button
               className={cn(
                 "h-8 px-2 text-[11px] sm:h-9 sm:px-3 sm:text-xs md:text-sm",
-                isArabic && "font-semibold"
+                isArabic && "font-semibold",
+                hasActiveFilters && !filterOpen && "border-primary/60 ring-1 ring-primary/20 bg-primary/10",
               )}
               onClick={() => {
                 handleSetCategory({ filterOpen: filterOpen ? "" : "true" });
@@ -155,6 +168,11 @@ export default function ChallengeFilter({
               variant={filterOpen ? "defaultBH" : "outline2"}
             >
               <Filter className="size-3.5 sm:size-4" /> {t("filter")}
+              {hasActiveFilters && (
+                <span className="inline-flex items-center justify-center size-4 sm:size-5 rounded-full bg-primary text-primary-foreground text-[10px] sm:text-xs font-medium">
+                  {activeFilterCount}
+                </span>
+              )}
             </Button>
           )}
           <div className="hidden sm:block w-px h-6 bg-border" />
