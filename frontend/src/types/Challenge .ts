@@ -7,6 +7,10 @@ export type TChallenge = {
   EAs: boolean;
   maxLeverage: string;
   activationFees: number | null;
+  contractSizeMini?: number | null;
+  contractSizeMicro?: number | null;
+  consistencyRuleChallenge?: number | null;
+  consistencyRuleFunded?: number | null;
   maxLoss: number;
   maxLostType: "STATIC" | "DYNAMIC";
   minTradingDays: number;

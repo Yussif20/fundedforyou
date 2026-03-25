@@ -223,12 +223,33 @@ export default function ChallengeForm({ methods }: { methods: any }) {
       />
 
       {isFutures ? (
-        <CustomInput
-          label={t("activationFees")}
-          name="activationFees"
-          type="number"
-          placeholder={t("activationFeesPlaceholder")}
-        />
+        <>
+          <CustomInput
+            label={t("activationFees")}
+            name="activationFees"
+            type="number"
+            placeholder={t("activationFeesPlaceholder")}
+          />
+          <div className="col-span-full">
+            <label className="block text-sm font-medium mb-2">
+              {t("maxContractSize")}
+            </label>
+            <div className="grid grid-cols-2 gap-4">
+              <CustomInput
+                label={t("contractSizeMini")}
+                name="contractSizeMini"
+                type="number"
+                placeholder={t("contractSizeMiniPlaceholder")}
+              />
+              <CustomInput
+                label={t("contractSizeMicro")}
+                name="contractSizeMicro"
+                type="number"
+                placeholder={t("contractSizeMicroPlaceholder")}
+              />
+            </div>
+          </div>
+        </>
       ) : (
         <CustomInput
           label={t("maxLeverage")}
@@ -237,6 +258,26 @@ export default function ChallengeForm({ methods }: { methods: any }) {
           placeholder={t("maxLeveragePlaceholder")}
         />
       )}
+
+      <div className="col-span-full">
+        <label className="block text-sm font-medium mb-2">
+          {t("consistencyRule")}
+        </label>
+        <div className="grid grid-cols-2 gap-4">
+          <CustomInput
+            label={t("consistencyRuleChallenge")}
+            name="consistencyRuleChallenge"
+            type="number"
+            placeholder={t("consistencyRuleChallengePlaceholder")}
+          />
+          <CustomInput
+            label={t("consistencyRuleFunded")}
+            name="consistencyRuleFunded"
+            type="number"
+            placeholder={t("consistencyRuleFundedPlaceholder")}
+          />
+        </div>
+      </div>
     </>
   );
 }

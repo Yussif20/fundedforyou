@@ -16,6 +16,8 @@ import useIsFutures from "@/hooks/useIsFutures";
 import { type ColumnDef } from "@/hooks/useColumnCustomization";
 import { useMemo } from "react";
 import { cn } from "@/lib/utils";
+import { useQueryBuilder } from "@/hooks/usePagination";
+import { ChevronDown, ChevronsUpDown, ChevronUp } from "lucide-react";
 
 export const CHALLENGE_COLUMNS: ColumnDef[] = [
   { key: "accountSize", labelKey: "accountSize" },
@@ -24,6 +26,7 @@ export const CHALLENGE_COLUMNS: ColumnDef[] = [
   { key: "profitTarget", labelKey: "profitTarget" },
   { key: "dailyLoss", labelKey: "dailyLoss" },
   { key: "maxLoss", labelKey: "maxLoss" },
+  { key: "consistencyRule", labelKey: "consistencyRule" },
   { key: "profitSplit", labelKey: "profitSplit" },
   { key: "payoutFrequency", labelKey: "payoutFrequency" },
   { key: "price", labelKey: "price" },
@@ -37,10 +40,67 @@ export const FUTURES_CHALLENGE_COLUMNS: ColumnDef[] = [
   { key: "dailyLoss", labelKey: "dailyLoss" },
   { key: "maxLoss", labelKey: "maxLoss" },
   { key: "activationFees", labelKey: "activationFees" },
+  { key: "maxContractSize", labelKey: "maxContractSize" },
+  { key: "consistencyRule", labelKey: "consistencyRule" },
   { key: "profitSplit", labelKey: "profitSplit" },
   { key: "payoutFrequency", labelKey: "payoutFrequency" },
   { key: "price", labelKey: "price" },
 ];
+
+function SortIcon({ field }: { field: string }) {
+  const { getParam, setParam } = useQueryBuilder();
+  const sortBy = getParam("sort") || "";
+
+  const handleClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    let next = field;
+    if (sortBy === field) next = `-${field}`;
+    else if (sortBy === `-${field}`) next = "";
+    setParam("sort", next);
+  };
+
+  return (
+    <button type="button" onClick={handleClick} className="inline-flex cursor-pointer hover:text-primary">
+      {sortBy === field && <ChevronUp className="size-3.5 md:size-4" />}
+      {sortBy === `-${field}` && <ChevronDown className="size-3.5 md:size-4" />}
+      {sortBy !== field && sortBy !== `-${field}` && <ChevronsUpDown className="size-3.5 md:size-4" />}
+    </button>
+  );
+}
+
+function ContractSizeSortHeader({ t }: { t: (key: string) => string }) {
+  const parts = t("maxContractSize").split("\n");
+  const [miniLabel, microLabel] = (parts[1] || "").split("|").map((s) => s.trim());
+  return (
+    <div className="flex flex-col items-center leading-tight whitespace-nowrap">
+      <span>{parts[0]}</span>
+      <div className="flex items-center gap-1 text-[10px] md:text-xs text-muted-foreground font-normal">
+        <SortIcon field="contractSizeMini" />
+        <span>{miniLabel}</span>
+        <span>|</span>
+        <span>{microLabel}</span>
+        <SortIcon field="contractSizeMicro" />
+      </div>
+    </div>
+  );
+}
+
+function ConsistencyRuleSortHeader({ t }: { t: (key: string) => string }) {
+  const parts = t("consistencyRule").split("\n");
+  const [challengeLabel, fundedLabel] = (parts[1] || "").split("|").map((s) => s.trim());
+  return (
+    <div className="flex flex-col items-center leading-tight whitespace-nowrap">
+      <span>{parts[0]}</span>
+      <div className="flex items-center gap-1 text-[10px] md:text-xs text-muted-foreground font-normal">
+        <SortIcon field="consistencyRuleChallenge" />
+        <span>{challengeLabel}</span>
+        <span>|</span>
+        <span>{fundedLabel}</span>
+        <SortIcon field="consistencyRuleFunded" />
+      </div>
+    </div>
+  );
+}
 
 type ChallengeTableProps = {
   companySlug?: string;
@@ -206,7 +266,8 @@ export default function ChallengeTable({
   const defaultColumns = isFutures ? FUTURES_CHALLENGE_COLUMNS : CHALLENGE_COLUMNS;
   const baseKeys = orderedVisibleKeys ?? defaultColumns.map((c) => c.key);
 
-  const visibleKeys = baseKeys.filter((key) => key !== "buy");
+  const adminOnlyColumns = new Set(["maxContractSize", "consistencyRule"]);
+  const visibleKeys = baseKeys.filter((key) => key !== "buy" && (!adminOnlyColumns.has(key) || isAdmin));
 
   const headers = useMemo(() => {
     const firmIdentityHeaders = [
@@ -241,6 +302,8 @@ export default function ChallengeTable({
       dailyLoss: "Maximum % loss allowed in a single trading day",
       maxLoss: "Maximum total % drawdown allowed across the account",
       activationFees: "One-time fee required to activate the funded account",
+      maxContractSize: "Maximum contract sizes for Mini and Micro lots",
+      consistencyRule: "Consistency rule values for challenge and funded phases",
       profitSplit: "% of profits you keep after passing evaluation",
       payoutFrequency: "How often you can request profit withdrawals",
       price: "Cost to enter the challenge",
@@ -250,13 +313,33 @@ export default function ChallengeTable({
       price: `md:sticky md:z-20 md:bg-background group-hover:md:bg-background ${isArabic ? "md:left-0 md:shadow-[2px_0_4px_rgba(0,0,0,0.1)]" : "md:right-0 md:shadow-[-2px_0_4px_rgba(0,0,0,0.1)]"}`,
     };
 
-    const visibleHeaders = visibleKeys.map((key) => ({
-      label: t(key),
-      field: key,
-      tooltip: tooltips[key],
-      center: true,
-      ...(stickyClasses[key] ? { className: stickyClasses[key] } : {}),
-    }));
+    const visibleHeaders = visibleKeys.map((key) => {
+      if (key === "maxContractSize") {
+        return {
+          label: <ContractSizeSortHeader t={t} />,
+          field: key,
+          tooltip: tooltips[key],
+          center: true,
+          hideSort: true,
+        };
+      }
+      if (key === "consistencyRule") {
+        return {
+          label: <ConsistencyRuleSortHeader t={t} />,
+          field: key,
+          tooltip: tooltips[key],
+          center: true,
+          hideSort: true,
+        };
+      }
+      return {
+        label: t(key),
+        field: key,
+        tooltip: tooltips[key],
+        center: true,
+        ...(stickyClasses[key] ? { className: stickyClasses[key] } : {}),
+      };
+    });
 
     const actionHeader = isAdmin
       ? [{ label: t("action"), field: "action", hideSort: true, center: true }]
@@ -267,11 +350,11 @@ export default function ChallengeTable({
 
   const colSpan = 3 + visibleKeys.length + (isAdmin ? 1 : 0);
 
-  if (isLoading || isFetching) return <TableSkeleton />;
+  if (isLoading) return <TableSkeleton />;
 
   return (
     <div className="max-w-full w-full space-y-8">
-      <Table className="min-w-[1100px]">
+      <Table className={cn("min-w-[1100px]", isFetching && "opacity-50 pointer-events-none transition-opacity")}>
         <SortTableHeader headers={headers} />
         <TableBody colSpan={colSpan}>
           {challenges.map((item: TChallenge, index: number) => (

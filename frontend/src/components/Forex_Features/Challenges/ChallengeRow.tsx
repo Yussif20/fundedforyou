@@ -131,6 +131,28 @@ export default function ChallengeRow({
         {challenge?.activationFees ? formatCurrencyLong(challenge.activationFees) : "-"}
       </TableCell>
     ),
+    maxContractSize: (() => {
+      const mini = challenge?.contractSizeMini;
+      const micro = challenge?.contractSizeMicro;
+      const miniLabel = mini ? String(mini) : t("none");
+      const microLabel = micro ? String(micro) : t("none");
+      return (
+        <TableCell key="maxContractSize" center className="text-sm md:text-base text-white">
+          {miniLabel} | {microLabel}
+        </TableCell>
+      );
+    })(),
+    consistencyRule: (() => {
+      const ch = challenge?.consistencyRuleChallenge;
+      const fu = challenge?.consistencyRuleFunded;
+      const chLabel = ch ? String(ch) : t("none");
+      const fuLabel = fu ? String(fu) : t("none");
+      return (
+        <TableCell key="consistencyRule" center className="text-sm md:text-base text-white">
+          {chLabel} | {fuLabel}
+        </TableCell>
+      );
+    })(),
     profitSplit: (
       <TableCell key="profitSplit" center className="text-sm md:text-base">
         <div className="flex items-center justify-center gap-2">

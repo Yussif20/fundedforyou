@@ -43,6 +43,10 @@ model Challenge {
     timeLimit             Int
     maxLeverage           String
     activationFees        Float?    @default(0)
+    contractSizeMini      Float?    @default(0)
+    contractSizeMicro     Float?    @default(0)
+    consistencyRuleChallenge Float? @default(0)
+    consistencyRuleFunded    Float? @default(0)
     order                 Int?      @default(0)
 
     newsTrading      Boolean

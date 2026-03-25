@@ -48,6 +48,10 @@ export default function CreateChallengeModal({
       timeLimit: "",
       maxLeverage: "",
       activationFees: "",
+      contractSizeMini: "",
+      contractSizeMicro: "",
+      consistencyRuleChallenge: "",
+      consistencyRuleFunded: "",
 
       newsTrading: true,
       copyTrading: false,
@@ -72,6 +76,10 @@ export default function CreateChallengeModal({
       profitSplit: Number(data.profitSplit),
       timeLimit: Number(data.timeLimit),
       activationFees: data.activationFees ? Number(data.activationFees) : null,
+      contractSizeMini: data.contractSizeMini ? Number(data.contractSizeMini) : 0,
+      contractSizeMicro: data.contractSizeMicro ? Number(data.contractSizeMicro) : 0,
+      consistencyRuleChallenge: data.consistencyRuleChallenge ? Number(data.consistencyRuleChallenge) : 0,
+      consistencyRuleFunded: data.consistencyRuleFunded ? Number(data.consistencyRuleFunded) : 0,
     };
 
     try {
