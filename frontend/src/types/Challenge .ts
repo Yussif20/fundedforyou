@@ -58,5 +58,7 @@ export type TChallenge = {
     }[];
     maxAllocation: number;
     country: string;
+    firmType?: string;
+    restrictedCountries?: string[];
   };
 };

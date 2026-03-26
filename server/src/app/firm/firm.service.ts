@@ -103,8 +103,10 @@ const getAllFirms = async (query: FirmParams, userRole?: string) => {
           title: true,
         },
       },
+      firmType: true,
       maxAllocation: true,
       country: true,
+      restrictedCountries: true,
       offers: {
         where: { isDeleted: false, showInBanner: true },
         select: {

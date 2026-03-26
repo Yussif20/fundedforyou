@@ -182,6 +182,7 @@ const getAllChallenge = catchAsync(async (req, res) => {
           },
           maxAllocation: true,
           country: true,
+          firmType: true,
         },
       },
     })
