@@ -4,8 +4,11 @@ import useIsArabic from "@/hooks/useIsArabic";
 import useIsFutures from "@/hooks/useIsFutures";
 import { Link, useRouter } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
+import { useGetMeQuery } from "@/redux/api/userApi";
+import { useCurrentToken } from "@/redux/authSlice";
+import { useAppSelector } from "@/redux/store";
 import { useTranslations } from "next-intl";
-import { TrendingUp, Gift, Trophy, GitCompareArrows } from "lucide-react";
+import { TrendingUp, Gift, Trophy, GitCompareArrows, ArrowLeftRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { useId, useRef } from "react";
 
@@ -17,6 +20,10 @@ export default function NavItems() {
   const isArabic = useIsArabic();
   const router = useRouter();
   const scrollGenRef = useRef(0);
+  const token = useAppSelector(useCurrentToken);
+  const { data: meData } = useGetMeQuery(undefined, { skip: !token });
+  const userRole = meData?.data?.user?.role;
+  const isAdmin = userRole === "SUPER_ADMIN" || userRole === "MODERATOR";
 
   const navItems = [
     {
@@ -57,11 +64,24 @@ export default function NavItems() {
             scrollToTop: false,
           },
         ]),
+    ...(isAdmin
+      ? [
+          {
+            name: t("comparison"),
+            href: isFutures ? "/comparison?type=futures" : "/comparison?type=forex",
+            icon: <ArrowLeftRight size={13} />,
+            part: 4,
+            scrollToTabs: false,
+            scrollToTop: false,
+          },
+        ]
+      : []),
   ].map((item) => ({
     ...item,
-    href: isFutures
-      ? "/futures" + (item.href === "/forex" ? "" : item.href.replace(/^\/forex/, ""))
-      : item.href,
+    href:
+      isFutures && item.href.startsWith("/forex")
+        ? "/futures" + (item.href === "/forex" ? "" : item.href.replace(/^\/forex/, ""))
+        : item.href,
   }));
 
   const waitForElement = (

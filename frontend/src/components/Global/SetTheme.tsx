@@ -1,9 +1,10 @@
 "use client";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { useEffect, useMemo } from "react";
 
 export default function SetTheme() {
   const pathName = usePathname();
+  const searchParams = useSearchParams();
   const themes = useMemo(
     () => ({
       normal: "root",
@@ -12,13 +13,16 @@ export default function SetTheme() {
     []
   );
   useEffect(() => {
-    if (pathName.includes("/futures")) {
+    const isFutures =
+      pathName.includes("/futures") ||
+      searchParams.get("type")?.toLowerCase() === "futures";
+    if (isFutures) {
       document.documentElement.classList.remove(...Object.values(themes));
       document.documentElement.classList.add("yellow-theme");
     } else {
       document.documentElement.classList.remove(...Object.values(themes));
       document.documentElement.classList.add("root");
     }
-  }, [pathName]);
+  }, [pathName, searchParams]);
   return null;
 }

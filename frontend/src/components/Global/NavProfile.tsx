@@ -16,7 +16,7 @@ import { useRouter } from "next/navigation";
 // icons
 import useIsArabic from "@/hooks/useIsArabic";
 import { Link } from "@/i18n/navigation";
-import { ArrowLeftRight, Box, LayoutDashboard, LogOut, User } from "lucide-react";
+import { Box, LayoutDashboard, LogOut, User } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Separator } from "../ui/separator";
 
@@ -82,14 +82,6 @@ export default function NavProfile() {
           <DropdownMenuItem dir={isArabic ? "rtl" : "ltr"} asChild>
             <Link href="/overview" className="flex items-center gap-2">
               <LayoutDashboard size={16} /> {t("overview")}
-            </Link>
-          </DropdownMenuItem>
-        )}
-
-        {(data?.data?.user?.role === "SUPER_ADMIN" || data?.data?.user?.role === "MODERATOR") && (
-          <DropdownMenuItem dir={isArabic ? "rtl" : "ltr"} asChild>
-            <Link href="/comparison" className="flex items-center gap-2">
-              <ArrowLeftRight size={16} /> {t("comparison")}
             </Link>
           </DropdownMenuItem>
         )}

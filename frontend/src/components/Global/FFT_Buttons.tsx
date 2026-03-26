@@ -4,6 +4,7 @@ import { useTranslations } from "next-intl";
 import { Button } from "../ui/button";
 import SwitchIcon from "./Icons/SwitchIcon";
 import { usePathname, useRouter } from "@/i18n/navigation";
+import { useSearchParams } from "next/navigation";
 import { cn } from "@/lib/utils";
 import useIsArabic from "@/hooks/useIsArabic";
 import { motion } from "framer-motion";
@@ -13,10 +14,13 @@ export default function FFT_Buttons({ compact }: { compact?: boolean }) {
   const id = useId();
   const t = useTranslations("Navbar");
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   const router = useRouter();
   const isArabic = useIsArabic();
 
-  const routerIsFutures = pathname.startsWith("/futures");
+  const routerIsFutures =
+    pathname.startsWith("/futures") ||
+    searchParams.get("type")?.toLowerCase() === "futures";
 
   // Optimistic state — updates immediately on click so animation doesn't
   // wait for Next.js router to finish navigating.
@@ -37,6 +41,15 @@ export default function FFT_Buttons({ compact }: { compact?: boolean }) {
     setRotation((prev) => prev + 180);
 
     window.scrollTo({ top: 0, behavior: "instant" });
+
+    // On the comparison page, toggle the type param instead of changing the base path
+    if (pathname === "/comparison") {
+      router.push(
+        `/comparison?type=${newIsFutures ? "futures" : "forex"}`,
+        { scroll: false }
+      );
+      return;
+    }
 
     const currentBase = isFutures ? "/futures" : "/forex";
     const strippedPath = pathname.startsWith(currentBase)

@@ -8,7 +8,7 @@ import { useAppSelector } from "@/redux/store";
 import { TChallenge } from "@/types/Challenge ";
 import { countries } from "@/data/country.data";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import useIsArabic from "@/hooks/useIsArabic";
@@ -85,6 +85,9 @@ export default function ComparisonPage() {
     }
   }, [meLoading, userRole, router]);
 
+  const searchParams = useSearchParams();
+  const firmType = searchParams.get("type")?.toUpperCase() === "FUTURES" ? "FUTURES" : "FOREX";
+
   const { data: firmsData } = useGetAllFirmsQuery([
     { name: "limit", value: 1000 },
   ]);
@@ -92,8 +95,11 @@ export default function ComparisonPage() {
     { name: "limit", value: 5000 },
   ]);
 
-  const firms: FirmData[] = (firmsData as any)?.firms || [];
-  const challenges: TChallenge[] = (challengesData as any)?.data || [];
+  const allFirms: FirmData[] = (firmsData as any)?.firms || [];
+  const allChallenges: TChallenge[] = (challengesData as any)?.data || [];
+
+  const firms = allFirms.filter((f) => f.firmType === firmType);
+  const challenges = allChallenges.filter((c) => c.firm?.firmType === firmType);
 
   const [columns, setColumns] = useState<ComparisonColumn[]>([
     { firmId: "", challengeNameSteps: "", accountSize: "" },
