@@ -316,7 +316,7 @@ export default function SingleOffer(props: {
   prevFirm?: FirmWithOffers;
   nextFirm?: FirmWithOffers;
 }) {
-  const { onlyShowMatch, hideBlackHoles, isTopOffer, data } = props;
+  const { onlyShowMatch, isTopOffer, data } = props;
   const glowIndex = props.index ?? 0;
   const glowTotal = props.totalCount ?? 1;
   const offer = data?.offers ?? [];
