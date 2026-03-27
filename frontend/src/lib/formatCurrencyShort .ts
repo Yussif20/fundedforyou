@@ -46,9 +46,10 @@ export const formatCurrencyLong = (
 ): string => {
   const num = typeof value === "string" ? parseFloat(value) : value;
   if (isNaN(num)) return showDollar ? "$0" : "0";
-  const formatted = Math.round(num).toLocaleString("en-US", {
+  const hasDecimals = num % 1 !== 0;
+  const formatted = num.toLocaleString("en-US", {
     minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
+    maximumFractionDigits: hasDecimals ? 2 : 0,
   });
   return showDollar ? `$${formatted}` : formatted;
 };

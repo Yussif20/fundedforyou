@@ -103,7 +103,7 @@ const getAllChallenge = catchAsync(async (req, res) => {
   }
 
   if (!query.sort) {
-    query.sort = "order";
+    query.sort = "firm.index,order";
   }
 
   const firmQuery = new QueryBuilder(prisma.challenge, query);

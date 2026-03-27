@@ -134,22 +134,22 @@ export default function ChallengeRow({
     maxContractSize: (() => {
       const mini = challenge?.contractSizeMini;
       const micro = challenge?.contractSizeMicro;
-      const miniLabel = mini ? String(mini) : t("none");
-      const microLabel = micro ? String(micro) : t("none");
+      const miniLabel = mini ? String(mini) : <span className="text-xs md:text-sm text-muted-foreground">{t("none")}</span>;
+      const microLabel = micro ? String(micro) : <span className="text-xs md:text-sm text-muted-foreground">{t("none")}</span>;
       return (
         <TableCell key="maxContractSize" center className="text-sm md:text-base text-white">
-          {miniLabel} | {microLabel}
+          {miniLabel} <span className="mx-2">|</span> {microLabel}
         </TableCell>
       );
     })(),
     consistencyRule: (() => {
       const ch = challenge?.consistencyRuleChallenge;
       const fu = challenge?.consistencyRuleFunded;
-      const chLabel = ch ? String(ch) : t("none");
-      const fuLabel = fu ? String(fu) : t("none");
+      const chLabel = ch ? String(ch) : <span className="text-xs md:text-sm text-muted-foreground">{t("none")}</span>;
+      const fuLabel = fu ? String(fu) : <span className="text-xs md:text-sm text-muted-foreground">{t("none")}</span>;
       return (
         <TableCell key="consistencyRule" center className="text-sm md:text-base text-white">
-          {chLabel} | {fuLabel}
+          {chLabel} <span className="mx-2">|</span> {fuLabel}
         </TableCell>
       );
     })(),
