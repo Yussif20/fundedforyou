@@ -1358,6 +1358,8 @@
     "notAllowed": "Not Allowed",
     "accountSize": "Account Size",
     "chooseAccountSize": "Choose account size",
+    "loading": "Loading...",
+    "noData": "No options available",
     "emptyTitle": "Select firms to compare",
     "emptyDescription": "Choose a firm, challenge name, and account size from the cards above to start comparing side by side."
   },

@@ -34,6 +34,7 @@ import {
   Building2,
   Trophy,
   DollarSign,
+  Loader2,
 } from "lucide-react";
 
 type FirmData = {
@@ -88,10 +89,10 @@ export default function ComparisonPage() {
   const searchParams = useSearchParams();
   const firmType = searchParams.get("type")?.toUpperCase() === "FUTURES" ? "FUTURES" : "FOREX";
 
-  const { data: firmsData } = useGetAllFirmsQuery([
+  const { data: firmsData, isLoading: firmsLoading } = useGetAllFirmsQuery([
     { name: "limit", value: 1000 },
   ]);
-  const { data: challengesData } = useGetAllChallengesQuery([
+  const { data: challengesData, isLoading: challengesLoading } = useGetAllChallengesQuery([
     { name: "limit", value: 5000 },
   ]);
 
@@ -491,20 +492,31 @@ export default function ComparisonPage() {
                     <SelectValue placeholder={t("chooseFirm")} />
                   </SelectTrigger>
                   <SelectContent>
-                    {firms.map((firm) => (
-                      <SelectItem key={firm.id} value={firm.id}>
-                        <div className="flex items-center gap-2">
-                          {firm.logoUrl && (
-                            <img
-                              src={firm.logoUrl}
-                              alt={firm.title}
-                              className="size-5 rounded object-contain"
-                            />
-                          )}
-                          {firm.title}
-                        </div>
-                      </SelectItem>
-                    ))}
+                    {firmsLoading ? (
+                      <div className="flex items-center justify-center gap-2 py-4 text-muted-foreground">
+                        <Loader2 className="size-4 animate-spin" />
+                        <span className="text-sm">{t("loading")}</span>
+                      </div>
+                    ) : firms.length === 0 ? (
+                      <div className="py-4 text-center text-sm text-muted-foreground">
+                        {t("noData")}
+                      </div>
+                    ) : (
+                      firms.map((firm) => (
+                        <SelectItem key={firm.id} value={firm.id}>
+                          <div className="flex items-center gap-2">
+                            {firm.logoUrl && (
+                              <img
+                                src={firm.logoUrl}
+                                alt={firm.title}
+                                className="size-5 rounded object-contain"
+                              />
+                            )}
+                            {firm.title}
+                          </div>
+                        </SelectItem>
+                      ))
+                    )}
                   </SelectContent>
                 </Select>
 
@@ -541,11 +553,22 @@ export default function ComparisonPage() {
                         />
                       </SelectTrigger>
                       <SelectContent>
-                        {cnStepsOptions.map((opt) => (
-                          <SelectItem key={opt.value} value={opt.value}>
-                            {opt.label}
-                          </SelectItem>
-                        ))}
+                        {challengesLoading ? (
+                          <div className="flex items-center justify-center gap-2 py-4 text-muted-foreground">
+                            <Loader2 className="size-4 animate-spin" />
+                            <span className="text-sm">{t("loading")}</span>
+                          </div>
+                        ) : cnStepsOptions.length === 0 ? (
+                          <div className="py-4 text-center text-sm text-muted-foreground">
+                            {t("noData")}
+                          </div>
+                        ) : (
+                          cnStepsOptions.map((opt) => (
+                            <SelectItem key={opt.value} value={opt.value}>
+                              {opt.label}
+                            </SelectItem>
+                          ))
+                        )}
                       </SelectContent>
                     </Select>
                   </div>
@@ -568,11 +591,22 @@ export default function ComparisonPage() {
                         <SelectValue placeholder={t("chooseAccountSize")} />
                       </SelectTrigger>
                       <SelectContent>
-                        {accountSizeOptions.map((size) => (
-                          <SelectItem key={size} value={String(size)}>
-                            ${formatK(size)}
-                          </SelectItem>
-                        ))}
+                        {challengesLoading ? (
+                          <div className="flex items-center justify-center gap-2 py-4 text-muted-foreground">
+                            <Loader2 className="size-4 animate-spin" />
+                            <span className="text-sm">{t("loading")}</span>
+                          </div>
+                        ) : accountSizeOptions.length === 0 ? (
+                          <div className="py-4 text-center text-sm text-muted-foreground">
+                            {t("noData")}
+                          </div>
+                        ) : (
+                          accountSizeOptions.map((size) => (
+                            <SelectItem key={size} value={String(size)}>
+                              ${formatK(size)}
+                            </SelectItem>
+                          ))
+                        )}
                       </SelectContent>
                     </Select>
                   </div>
