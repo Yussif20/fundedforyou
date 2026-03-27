@@ -28,7 +28,6 @@ import { useState } from "react";
 import DeleteOfferModal from "./DeleteOfferModal";
 import EditOfferModal from "./EditOfferModal";
 import { FirmWithOffers, Offer } from "@/redux/api/offerApi";
-import OfferIndexChange from "./OfferIndexChange";
 import { Link } from "@/i18n/navigation";
 import useIsFutures from "@/hooks/useIsFutures";
 import DiscountText from "@/components/Global/DiscountText";
@@ -39,10 +38,10 @@ import dynamic from "next/dynamic";
 
 const OfferCoinClient = dynamic(() => import("./OfferCoinClient"), { ssr: false });
 
-const OFFER_BADGE_KEYWORDS = ["off", "خصم", "استرداد", "Reward"];
+export const OFFER_BADGE_KEYWORDS = ["off", "خصم", "استرداد", "Reward"];
 
 /** Styled offer description with line-clamp and full-text tooltip */
-function OfferDescription({
+export function OfferDescription({
   text,
   className,
 }: {
@@ -55,11 +54,11 @@ function OfferDescription({
         <TooltipTrigger asChild>
           <div
             className={cn(
-              "flex items-start px-3 py-2 rounded-lg border-l-2 border-primary/60 bg-primary/5 cursor-default",
+              "flex items-start px-3 py-2 rounded-lg border-l-2 border-primary/60 bg-primary/5 cursor-default w-fit lg:w-[90%]",
               className
             )}
           >
-            <p className="text-sm md:text-base font-semibold text-foreground line-clamp-2 leading-relaxed">
+            <p className="text-xs md:text-sm font-semibold text-foreground line-clamp-2 leading-relaxed">
               {text}
             </p>
           </div>
@@ -79,7 +78,7 @@ function OfferDescription({
  *  "default" → large solid primary badge (used for the main total-sale in the left half)
  *  "subtle"  → smaller outlined badge (used for sub-offer badges in the right half)
  */
-function OfferPercentageBadge({
+export function OfferPercentageBadge({
   percentage,
   showGift,
   giftText,
@@ -107,6 +106,7 @@ function OfferPercentageBadge({
   glowTotal?: number;
 }) {
   const gift = visibleText(isArabic, giftText ?? undefined, giftTextArabic ?? undefined);
+  const hasGift = showGift && !!gift;
   const isText = discountType === "TEXT";
   const customText = isText ? visibleText(isArabic, discountText, discountTextArabic) : "";
 
@@ -123,14 +123,14 @@ function OfferPercentageBadge({
         "group/badge relative flex flex-col items-center justify-center overflow-hidden",
         isSubtle
           ? "rounded-xl w-[76px] min-w-[76px] py-3"
-          : "rounded-2xl w-[130px] min-w-0 h-[110px] lg:min-w-[110px] lg:w-[110px] lg:h-[110px]",
-        // Glassy white background
-        "bg-gradient-to-br from-white/[0.22] via-white/[0.15] to-white/[0.10]",
+          : "rounded-2xl w-[130px] min-w-0 h-[110px] lg:min-w-[90px] lg:w-[90px] lg:h-[90px]",
+        // Glassy background close to site bg
+        "bg-gradient-to-br from-background/80 via-background/60 to-background/40",
         "backdrop-blur-2xl",
         // Border
         "border border-white/[0.25]",
-        // Glow animation
-        !isSubtle && "animate-discount-glow",
+        // LED border animation
+        !isSubtle && "discount-led-border",
         // Hover lift
         "transition-all duration-300",
         "hover:border-white/[0.35] hover:scale-[1.04]",
@@ -166,11 +166,13 @@ function OfferPercentageBadge({
                   "relative font-extrabold tabular-nums text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.4)]",
                   isSubtle
                     ? "text-lg leading-tight"
-                    : mainLen > 6
-                      ? "text-xl sm:text-2xl"
-                      : mainLen > 3
-                        ? "text-2xl sm:text-3xl"
-                        : "text-3xl sm:text-4xl"
+                    : hasGift
+                      ? (mainLen > 6 ? "text-base sm:text-lg" : mainLen > 3 ? "text-lg sm:text-xl" : "text-xl sm:text-2xl")
+                      : mainLen > 6
+                        ? "text-lg sm:text-xl"
+                        : mainLen > 3
+                          ? "text-xl sm:text-2xl"
+                          : "text-2xl sm:text-3xl"
                 )}
               >
                 {offMatch[1].trim()}
@@ -178,7 +180,7 @@ function OfferPercentageBadge({
               <span
                 className={cn(
                   "relative font-semibold uppercase tracking-widest text-white/90 drop-shadow-[0_1px_2px_rgba(0,0,0,0.3)]",
-                  isSubtle ? "text-[9px]" : "text-[11px] mt-0.5"
+                  isSubtle ? "text-[9px]" : hasGift ? "text-[10px]" : "text-[11px] mt-0.5"
                 )}
               >
                 {offMatch[2]}
@@ -200,7 +202,7 @@ function OfferPercentageBadge({
           <span
             className={cn(
               "relative font-extrabold tabular-nums text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.4)]",
-              isSubtle ? "text-lg leading-tight" : "text-3xl sm:text-4xl"
+              isSubtle ? "text-lg leading-tight" : hasGift ? "text-xl sm:text-2xl" : "text-2xl sm:text-3xl"
             )}
           >
             {percentage}%
@@ -223,7 +225,7 @@ function OfferPercentageBadge({
             "relative font-medium text-center text-white/90 backdrop-blur-sm rounded-md",
             isSubtle
               ? "mt-1.5 px-1.5 py-0.5 bg-primary/[0.08] text-[9px] leading-tight"
-              : "mt-2.5 px-2.5 py-1 bg-primary/[0.10] text-[10px]"
+              : "mt-1 px-2 py-0.5 bg-primary/[0.10] text-[8px]"
           )}
         >
           <GiftBox size={isSubtle ? 8 : 11} className="inline-block align-middle text-success" />{" "}
@@ -234,7 +236,7 @@ function OfferPercentageBadge({
   );
 }
 
-function CompanyHeader({
+export function CompanyHeader({
   companyData,
   isTopOffer,
   offer,
@@ -247,7 +249,7 @@ function CompanyHeader({
 }) {
   const isFutures = useIsFutures();
   return (
-    <div className="shrink-0 lg:w-1/2 lg:pr-6 lg:border-r lg:border-border flex flex-col lg:flex-row lg:self-stretch">
+    <div className="shrink-0 lg:w-1/3 lg:pr-6 lg:border-r lg:border-border flex flex-col lg:flex-row lg:self-stretch">
       {/* Company logo + name — centered on small screens, left-aligned on desktop */}
       <div className="w-full lg:w-[17.25rem] shrink-0 flex items-center justify-center lg:justify-start">
         <Link
@@ -285,9 +287,18 @@ function CompanyHeader({
           </div>
         </Link>
       </div>
-      {/* Total sale badge — half width centered on small screens, right of divider on desktop */}
+      {/* Dashed divider between logo and badge — desktop only */}
       {badge && (
-        <div className="flex w-1/2 lg:w-auto mx-auto lg:mx-0 flex-1 items-center justify-center mt-4 lg:mt-0">
+        <div className="hidden lg:flex items-center">
+          <div className="relative border-r-2 border-foreground/20 border-dashed h-full">
+            <div className="absolute -top-5 w-9 h-10 rounded-full bg-background -left-4"></div>
+            <div className="absolute -bottom-5 w-9 h-10 rounded-full bg-background -left-4"></div>
+          </div>
+        </div>
+      )}
+      {/* Total sale badge — fixed width centered on desktop */}
+      {badge && (
+        <div className="flex w-1/2 lg:w-40 mx-auto lg:mx-0 items-center justify-center mt-4 lg:mt-0 lg:pl-6">
           {badge}
         </div>
       )}
@@ -328,7 +339,7 @@ export default function SingleOffer(props: {
   return (
     <Card
       className={cn(
-        "border border-border rounded-xl p-4 sm:p-5 lg:px-6 lg:py-3 bg-card flex flex-col gap-4 lg:gap-6 justify-center lg:justify-center relative overflow-hidden h-[385px] lg:h-auto",
+        "border border-border rounded-xl p-4 sm:p-5 lg:px-6 lg:py-2 bg-card flex flex-col gap-4 lg:gap-6 justify-center lg:justify-center relative overflow-hidden h-[385px] lg:h-auto",
         onlyShowMatch && "border-none rounded-none bg-background px-0!"
       )}
     >
@@ -340,27 +351,6 @@ export default function SingleOffer(props: {
           </div>
           <OfferCoinClient />
         </>
-      )}
-      {!hideBlackHoles && (
-        <div
-          className={cn(
-            "absolute border-r-2 top-0 min-h-full border-foreground/20 border-dashed left-75 hidden lg:block w-0",
-            isArabic && "right-75"
-          )}
-        >
-          <div className="absolute -top-6 w-9 h-12 rounded-full bg-background -left-4"></div>
-          <div className="absolute -bottom-6 w-9 h-12 rounded-full bg-background -left-4"></div>
-        </div>
-      )}
-      {/* Admin reorder controls */}
-      {isAdmin && (
-        <div className="flex gap-2 items-center">
-          <OfferIndexChange
-            firm={data}
-            prevFirm={props.prevFirm}
-            nextFirm={props.nextFirm}
-          />
-        </div>
       )}
       {/* Left: company once. Right: all offers (no repeated company) */}
       {!onlyShowMatch ? (
@@ -456,7 +446,7 @@ export default function SingleOffer(props: {
   );
 }
 
-const OfferCard = ({
+export const OfferCard = ({
   offer,
   companyData,
   isTopOffer,
@@ -792,10 +782,10 @@ const OfferCard = ({
               isTopOffer && "lg:block!"
             )}
           ></div>
-          <div className="flex justify-between items-center w-full h-max  gap-x-3  my-auto">
+          <div className="flex justify-between items-center w-full h-max  gap-x-6  my-auto">
             <div className="hidden lg:block w-full">{leftContent}</div>
             <div className="flex items-center gap-2.5 justify-end ml-auto lg:ml-0 w-full lg:w-auto">
-              <div className="flex flex-col gap-4 lg:gap-5 ml-0 lg:ml-4 justify-center items-center w-full">
+              <div className="flex flex-col gap-5 lg:gap-7 ml-0 lg:ml-4 justify-center items-center w-full">
                 <div className={cn("grid lg:flex items-center gap-3 lg:gap-4 w-full min-w-0", displayCode ? "grid-cols-2" : "grid-cols-1")}>
                   <div className="space-y-2.5 lg:space-y-3 h-full lg:h-auto min-w-0">
                     {displayCode && (

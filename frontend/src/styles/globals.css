@@ -697,6 +697,54 @@ button {
   pointer-events: none;
 }
 
+/* LED border for discount badge — sweeping conic border glow inside the box */
+@property --discount-led-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes discount-led-sweep {
+  0%   { --discount-led-angle: 0deg; }
+  100% { --discount-led-angle: 360deg; }
+}
+
+.discount-led-border {
+  position: relative;
+}
+
+.discount-led-border::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  border: 1.5px solid transparent;
+  background:
+    conic-gradient(
+      from var(--discount-led-angle),
+      rgba(var(--primary-rgb, 5, 150, 102), 0.9) 0%,
+      rgba(var(--primary-rgb, 5, 150, 102), 0.4) 8%,
+      transparent 18%,
+      transparent 42%,
+      rgba(var(--primary-rgb, 5, 150, 102), 0.9) 50%,
+      rgba(var(--primary-rgb, 5, 150, 102), 0.4) 58%,
+      transparent 68%,
+      transparent 92%,
+      rgba(var(--primary-rgb, 5, 150, 102), 0.9) 100%
+    ) border-box;
+  -webkit-mask:
+    linear-gradient(#fff 0 0) padding-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#fff 0 0) padding-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  animation: discount-led-sweep 3s linear infinite;
+  pointer-events: none;
+}
+
 /* Discount card sequential glow — each card lights up briefly then fades.
    Use --glow-delay (inline) to stagger across cards.
    --glow-duration controls full cycle length. */

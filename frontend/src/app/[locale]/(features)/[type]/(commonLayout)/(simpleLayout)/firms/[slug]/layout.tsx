@@ -3,7 +3,7 @@ import FirmDetails from "@/components/FirmDetails/FirmDetails";
 import FirmOfferStickyBar from "@/components/FirmDetails/FirmOfferStickyBar";
 import FirmNavigate from "@/components/Forex_Features/Firms/FirmNavigate";
 import ScrollToTopOnOpen from "@/components/FirmDetails/ScrollToTopOnOpen";
-import SingleOffer from "@/components/Forex_Features/Offers/SingleOffer";
+import FirmOfferBanner from "@/components/FirmDetails/FirmOfferBanner";
 import { serverApi } from "@/lib/serverAxios";
 import "@/styles/globals.css";
 import { SinglePropFirm } from "@/types/firm.types";
@@ -80,7 +80,7 @@ export default async function RootLayout({
         <FirmDetails data={data.data} />
 
         <div className="hidden lg:block lg:sticky lg:top-(--navbar-height,5.5rem) bg-background z-30">
-          <SingleOffer hideBlackHoles data={data.data} />
+          <FirmOfferBanner data={data.data} />
         </div>
         <FDTabs slug={slug} count={data.data.count} />
         <FirmOfferStickyBar firm={data.data} />
