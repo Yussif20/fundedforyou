@@ -644,6 +644,59 @@ button {
   animation: shimmer 1.6s infinite;
 }
 
+/* LED border animation — light sweeps from diagonal corners along the border line */
+@property --led-angle {
+  syntax: "<angle>";
+  initial-value: 225deg;
+  inherits: false;
+}
+
+@keyframes led-corner-sweep {
+  0%   { --led-angle: 225deg; }
+  100% { --led-angle: 585deg; }
+}
+
+.led-border {
+  position: relative;
+  border: 1px solid rgba(var(--primary-rgb, 5, 150, 102), 0.06);
+}
+
+.led-border > * {
+  position: relative;
+  z-index: 1;
+}
+
+.led-border::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  z-index: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: conic-gradient(
+    from var(--led-angle),
+    rgba(var(--primary-rgb, 5, 150, 102), 0.8) 0%,
+    rgba(var(--primary-rgb, 5, 150, 102), 0.3) 10%,
+    rgba(var(--primary-rgb, 5, 150, 102), 0.06) 20%,
+    rgba(var(--primary-rgb, 5, 150, 102), 0.06) 30%,
+    rgba(var(--primary-rgb, 5, 150, 102), 0.8) 50%,
+    rgba(var(--primary-rgb, 5, 150, 102), 0.3) 60%,
+    rgba(var(--primary-rgb, 5, 150, 102), 0.06) 70%,
+    rgba(var(--primary-rgb, 5, 150, 102), 0.06) 80%,
+    rgba(var(--primary-rgb, 5, 150, 102), 0.8) 100%
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  animation: led-corner-sweep 4s linear infinite;
+  pointer-events: none;
+}
+
 /* Discount card sequential glow — each card lights up briefly then fades.
    Use --glow-delay (inline) to stagger across cards.
    --glow-duration controls full cycle length. */
