@@ -43,7 +43,7 @@ const firmApiApi = baseApi.injectEndpoints({
         method: "POST",
         body: data,
       }),
-      invalidatesTags: ["Firms"],
+      invalidatesTags: ["Firms", "Firm", "Challenge"],
     }),
     updateFirm: builder.mutation({
       query: ({ id, data }: { id: string; data: FormData }) => ({
@@ -51,14 +51,14 @@ const firmApiApi = baseApi.injectEndpoints({
         method: "PATCH",
         body: data,
       }),
-      invalidatesTags: ["Firms"],
+      invalidatesTags: ["Firms", "Firm", "Challenge"],
     }),
     deleteFirm: builder.mutation({
       query: (id: string) => ({
         url: `/firms/${id}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["Firms"],
+      invalidatesTags: ["Firms", "Firm", "Challenge"],
     }),
     changeIndex: builder.mutation({
       query: ({ id, index }: { id: string; index: number }) => ({
