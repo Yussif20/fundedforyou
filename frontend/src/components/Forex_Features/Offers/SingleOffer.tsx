@@ -32,7 +32,6 @@ import { Link } from "@/i18n/navigation";
 import useIsFutures from "@/hooks/useIsFutures";
 import DiscountText from "@/components/Global/DiscountText";
 import { visibleText } from "@/utils/visibleText";
-import { Separator } from "@/components/ui/separator";
 import CountdownTimer from "./CountdownTimer";
 import dynamic from "next/dynamic";
 
@@ -54,11 +53,11 @@ export function OfferDescription({
         <TooltipTrigger asChild>
           <div
             className={cn(
-              "flex items-start px-3 py-2 rounded-lg border-l-2 border-primary/60 bg-primary/5 cursor-default w-fit lg:w-[90%]",
+              "flex items-start justify-center lg:justify-start px-3 py-2 rounded-lg border-l-0 lg:border-l-2 border-primary/60 bg-transparent lg:bg-primary/5 cursor-default w-full lg:w-[90%]",
               className
             )}
           >
-            <p className="text-xs md:text-sm font-semibold text-foreground line-clamp-2 leading-relaxed">
+            <p className="text-sm md:text-sm font-semibold text-foreground line-clamp-2 leading-relaxed text-center lg:text-left">
               {text}
             </p>
           </div>
@@ -249,7 +248,7 @@ export function CompanyHeader({
 }) {
   const isFutures = useIsFutures();
   return (
-    <div className="shrink-0 lg:w-1/3 lg:pr-6 lg:border-r lg:border-border flex flex-col lg:flex-row lg:self-stretch">
+    <div className="shrink-0 lg:w-1/3 lg:pr-6 flex flex-col lg:flex-row lg:self-stretch">
       {/* Company logo + name — centered on small screens, left-aligned on desktop */}
       <div className="w-full lg:w-[17.25rem] shrink-0 flex items-center justify-center lg:justify-start">
         <Link
@@ -267,7 +266,7 @@ export function CompanyHeader({
             </div>
           </div>
           <div>
-            <h2 className="text-sm md:text-base xl:text-lg font-semibold text-foreground flex flex-wrap items-center gap-1">
+            <h2 className="text-lg md:text-base xl:text-lg font-semibold text-foreground flex flex-wrap items-center gap-1">
               {companyData.title}
               {isTopOffer && (
                 <span className="items-center gap-1 md:flex hidden text-primary">
@@ -298,7 +297,7 @@ export function CompanyHeader({
       )}
       {/* Total sale badge — fixed width centered on desktop */}
       {badge && (
-        <div className="flex w-1/2 lg:w-40 mx-auto lg:mx-0 items-center justify-center mt-4 lg:mt-0 lg:pl-6">
+        <div className="flex w-full lg:w-40 mx-auto lg:mx-0 items-center justify-center mt-4 lg:mt-0 lg:pl-10">
           {badge}
         </div>
       )}
@@ -354,7 +353,7 @@ export default function SingleOffer(props: {
       )}
       {/* Left: company once. Right: all offers (no repeated company) */}
       {!onlyShowMatch ? (
-        <div className="flex flex-col lg:flex-row lg:gap-6 w-full">
+        <div className="flex flex-col lg:flex-row lg:gap-2 w-full">
           <CompanyHeader
             companyData={companyData}
             isTopOffer={isTopOffer}
@@ -629,14 +628,9 @@ export const OfferCard = ({
         )}
       </div>
       {displayText || displayTextArabic ? (
-        <>
-          <Separator
-            className={cn("my-2 w-full ", !onlyShowMatch && "lg:block hidden")}
-          />
-          <OfferDescription
-            text={visibleText(isArabic, displayText, displayTextArabic)}
-          />
-        </>
+        <OfferDescription
+          text={visibleText(isArabic, displayText, displayTextArabic)}
+        />
       ) : null}
     </div>
   );
@@ -682,14 +676,14 @@ export const OfferCard = ({
 
         {/* Right: Code + Buy 50-50 on small screens, then More */}
         <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3 shrink-0 w-full sm:w-auto">
-          <div className={cn("grid gap-2 sm:contents min-w-0", displayCode ? "grid-cols-2" : "grid-cols-1")}>
+          <div className={cn("flex gap-2 sm:contents min-w-0", displayCode ? "" : "")}>
             {displayCode && (
               <button
                 onClick={() => copyToClipboard(displayCode)}
-                className={cn("flex justify-center items-center gap-2 border-2 border-dashed px-2.5 md:px-3 h-11 min-h-11 sm:h-auto sm:min-h-0 py-1.5 md:py-2 rounded-full text-sm w-full min-w-0 sm:w-auto transition-colors", codeBorderCls)}
+                className={cn("flex justify-center items-center gap-3 sm:gap-2 border-2 border-dashed px-2.5 md:px-3 h-11 min-h-11 sm:h-auto sm:min-h-0 py-1.5 md:py-2 rounded-full text-base sm:text-sm w-[70%] sm:w-auto min-w-0 transition-colors", codeBorderCls)}
               >
                 <span className={cn("font-normal", codeLabelCls)}>{t("code")}</span>
-                <p className="h-5 border-r border-foreground/20"></p>
+                <p className="h-6 sm:h-5 border-r border-foreground/20"></p>
                 <span className="font-semibold uppercase truncate">{displayCode}</span>
                 {isCopied ? (
                   <Check size={14} className="text-green-500 transition-colors shrink-0" />
@@ -698,7 +692,7 @@ export const OfferCard = ({
                 )}
               </button>
             )}
-            <Link href={companyData.affiliateLink} target="_blank" className="block w-full min-w-0 sm:w-auto">
+            <Link href={companyData.affiliateLink} target="_blank" className="block w-[30%] sm:w-auto min-w-0">
               <Button
                 size="lg"
                 className="w-full !h-12 !min-h-12 sm:h-auto sm:min-h-0 rounded-full text-sm sm:text-base font-semibold px-5 bg-gradient-to-r from-primary to-primary-dark text-primary-foreground shadow-lg hover:shadow-xl hover:brightness-110 transition-all duration-200"
@@ -786,8 +780,8 @@ export const OfferCard = ({
             <div className="hidden lg:block w-full">{leftContent}</div>
             <div className="flex items-center gap-2.5 justify-end ml-auto lg:ml-0 w-full lg:w-auto">
               <div className="flex flex-col gap-5 lg:gap-7 ml-0 lg:ml-4 justify-center items-center w-full">
-                <div className={cn("grid lg:flex items-center gap-3 lg:gap-4 w-full min-w-0", displayCode ? "grid-cols-2" : "grid-cols-1")}>
-                  <div className="space-y-2.5 lg:space-y-3 h-full lg:h-auto min-w-0">
+                <div className={cn("flex lg:flex items-center gap-3 lg:gap-4 w-full min-w-0", displayCode ? "" : "")}>
+                  <div className="w-[60%] lg:w-auto space-y-2.5 lg:space-y-3 h-full lg:h-auto min-w-0">
                     {displayCode && (
                       <button
                         onClick={() => copyToClipboard(displayCode)}
@@ -818,7 +812,7 @@ export const OfferCard = ({
                     </div>
                   </div>
                   <div className="border-border border-r-3 h-6 hidden lg:block" />
-                  <div className="space-y-2.5 lg:space-y-3 min-w-0">
+                  <div className="w-[40%] lg:w-auto space-y-2.5 lg:space-y-3 min-w-0">
                     <Link href={companyData.affiliateLink} target="_blank" className="block w-full min-w-0">
                       <Button className="w-full h-12 min-h-12 lg:h-auto lg:min-h-0 lg:w-28 rounded-full text-sm sm:text-base px-4 sm:px-5 font-semibold bg-gradient-to-r from-primary to-primary-dark text-primary-foreground shadow-lg hover:shadow-xl hover:brightness-110 transition-all duration-200">
                         {t("buy")}
