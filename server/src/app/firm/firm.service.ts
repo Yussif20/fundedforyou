@@ -13,9 +13,7 @@ const getAllFirms = async (query: FirmParams, userRole?: string) => {
   if (userRole !== "SUPER_ADMIN") {
     query.hidden = false;
   }
-  if (query.category === "POPULAR") {
-    query.isPopular = true;
-  } else if (query.category === "NEW") {
+  if (query.category === "NEW") {
     query.createdAt = {
       gte: new Date(new Date().setDate(new Date().getDate() - 30)),
     };
@@ -88,6 +86,8 @@ const getAllFirms = async (query: FirmParams, userRole?: string) => {
     .customFields({
       id: true,
       title: true,
+      notes: true,
+      notesArabic: true,
       logoUrl: true,
       slug: true,
       index: true,
@@ -408,7 +408,8 @@ const getSingleFirm = async (firmId: string, query: Record<string, any>, userRol
         leverageArabic: true,
         commission: true,
         commissionArabic: true,
-        isPopular: true,
+        notes: true,
+        notesArabic: true,
         restrictedCountries: true,
         restrictedCountriesNote: true,
         restrictedCountriesNoteArabic: true,

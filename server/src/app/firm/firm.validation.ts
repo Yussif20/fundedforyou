@@ -54,7 +54,8 @@ const createFirm = z.object({
         cnMinimumTradingDays: z.string().optional().default(""),
         cnMinimumTradingDaysArabic: z.string().optional().default(""),
       })).optional(),
-      isPopular: z.boolean().optional(),
+      notes: z.string().optional(),
+      notesArabic: z.string().optional(),
 
       accountSizes: z.string().optional(),
       accountSizesArabic: z.string().optional(),
@@ -169,7 +170,8 @@ const updateFirm = z.object({
       maxAllocation: z.number().min(1).optional(),
       country: z.string().min(1).optional(),
       programTypes: z.array(z.enum(StepsEnum)).optional(),
-      isPopular: z.boolean().optional(),
+      notes: z.string().optional(),
+      notesArabic: z.string().optional(),
 
       accountSizes: z.string().optional(),
       accountSizesArabic: z.string().optional(),

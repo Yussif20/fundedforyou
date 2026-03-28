@@ -4,6 +4,8 @@ model Firm {
     slug                String          @unique
     firmType            FirmTypeEnum
     title               String
+    notes               String      @default("")
+    notesArabic         String      @default("")
     dateEstablished     DateTime?
     ceo                 String          @default("")
     hidden              Boolean         @default(false)
@@ -38,8 +40,6 @@ model Firm {
     drawDownProgramTypeMap  Json     @default("{}")
     otherFeatures    String[]
     challengeNames   String[]
-    isPopular        Boolean     @default(false)
-    inNew            Boolean     @default(false)
     logoUrl          String
 
     accountSizes             String? @default("")

@@ -165,6 +165,8 @@ const getAllChallenge = catchAsync(async (req, res) => {
           id: true,
           slug: true,
           title: true,
+          notes: true,
+          notesArabic: true,
           logoUrl: true,
           platforms: true,
           programTypes: true,
@@ -252,6 +254,8 @@ const getSingleChallenge = catchAsync(async (req, res) => {
         select: {
           id: true,
           title: true,
+          notes: true,
+          notesArabic: true,
           logoUrl: true,
           platforms: true,
           programTypes: true,
