@@ -8,8 +8,10 @@ import Image, { StaticImageData } from "next/image";
 
 export default function FirmCell({
   company,
+  userRole,
 }: {
-  company: { slug: string; image: string | StaticImageData; name: string };
+  company: { slug: string; image: string | StaticImageData; name: string; notes?: string };
+  userRole?: string;
 }) {
   const isArabic = useIsArabic();
   const isFutures = useIsFutures();
@@ -44,6 +46,9 @@ export default function FirmCell({
             <h2 className="text-sm md:text-base xl:text-lg font-semibold whitespace-nowrap">
               {company.name}
             </h2>
+            {userRole === "SUPER_ADMIN" && company.notes && (
+              <p className="text-[10px] text-red-500 leading-tight whitespace-nowrap">{company.notes}</p>
+            )}
           </div>
         </Link>
       </TableCell>
@@ -83,11 +88,14 @@ export default function FirmCell({
       </TableCell>
 
       <TableCell className={cn("bg-background z-20 table-cell md:hidden w-fit")}>
-        <Link href={linkHref} scroll={false} className="flex justify-start max-md:outline-none max-md:focus:outline-none max-md:active:outline-none max-md:[-webkit-tap-highlight-color:transparent]">
-          <div className={cn("overflow-visible transition-all duration-200 md:max-w-none md:text-left", isArabic ? "text-right" : "text-left")}>
+        <Link href={linkHref} scroll={false} className="flex justify-center max-md:outline-none max-md:focus:outline-none max-md:active:outline-none max-md:[-webkit-tap-highlight-color:transparent]">
+          <div className={cn("overflow-visible transition-all duration-200 md:max-w-none md:text-left text-center")}>
             <h2 className="text-xs md:text-base xl:text-lg font-semibold whitespace-nowrap px-1">
               {company.name}
             </h2>
+            {userRole === "SUPER_ADMIN" && company.notes && (
+              <p className="text-[8px] text-red-500 leading-tight whitespace-nowrap px-1">{company.notes}</p>
+            )}
           </div>
         </Link>
       </TableCell>

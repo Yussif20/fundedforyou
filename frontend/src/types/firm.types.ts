@@ -35,6 +35,8 @@ export type SinglePropFirm = {
   id: string;
   affiliateLink: string;
   title: string;
+  notes?: string;
+  notesArabic?: string;
   logoUrl: string;
   slug: string;
   ceo: string;

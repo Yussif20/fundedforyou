@@ -8,7 +8,6 @@ import {
   propFirmInstrumentTypes,
 } from "@/data";
 import CustomComboBoxMultiple from "../Forms/CustomComboBoxMultiple";
-import CustomSelect from "../Forms/CustomSelect";
 import BMImageUpload from "../Overview/BrokerManagement/BMImageUpload";
 import { DrawDownProgramTypes, DrawDownTexts, MonthAndYear } from "./ExtraField";
 import { useTranslations } from "next-intl";
@@ -619,14 +618,19 @@ export default function FirmForm({
             placeholder={t("firmTitlePlaceholder")}
             required
           />
-          <CustomSelect
-            name="isPopular"
-            label={t("markPopular")}
-            placeholder={t("selectStatus")}
-            options={[
-              { value: "true", label: t("yes") },
-              { value: "false", label: t("no") },
-            ]}
+          <CustomInput
+            type="text"
+            label="Notes"
+            name="notes"
+            fieldClassName="h-11"
+            placeholder="Notes (English)"
+          />
+          <CustomInput
+            type="text"
+            label="Notes (Arabic)"
+            name="notesArabic"
+            fieldClassName="h-11"
+            placeholder="Notes (Arabic)"
           />
           <CustomInput
             type="text"

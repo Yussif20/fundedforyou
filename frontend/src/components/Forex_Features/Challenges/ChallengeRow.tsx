@@ -231,7 +231,9 @@ export default function ChallengeRow({
             image: challenge?.firm?.logoUrl,
             name: challenge?.firm?.title,
             slug: challenge?.firm?.slug,
+            notes: isArabic ? challenge?.firm?.notesArabic : challenge?.firm?.notes,
           }}
+          userRole={role}
         />
         {columnsToRender.map((key) => cellRenderers[key])}
         {role === "SUPER_ADMIN" && (

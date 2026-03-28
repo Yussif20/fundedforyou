@@ -45,6 +45,8 @@ export type TChallenge = {
   firm: {
     id: string;
     title: string;
+    notes?: string;
+    notesArabic?: string;
     slug: string;
     logoUrl: string;
     platforms: string[];

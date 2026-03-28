@@ -12,6 +12,7 @@ import React, { type ReactNode } from "react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import FirmCell from "./FirmCell";
+import useIsArabic from "@/hooks/useIsArabic";
 import PlatformCell from "./PlatformCell";
 import { ArrowUpRight } from "lucide-react";
 import { EditFirmDialog } from "@/components/FirmDetails/EditFirmDialog";
@@ -33,6 +34,7 @@ function FirmRow({
   userRole?: string;
 }) {
   const t = useTranslations("Firms");
+  const isArabic = useIsArabic();
   const country =
     countryDataByCountry(company.country) || countryData(company.country);
 
@@ -117,7 +119,9 @@ function FirmRow({
           image: company.logoUrl,
           name: company.title,
           slug: company.slug,
+          notes: isArabic ? company.notesArabic : company.notes,
         }}
+        userRole={userRole}
       />
       {columnsToRender.map((key) => cellRenderers[key])}
       {userRole === "SUPER_ADMIN" && (

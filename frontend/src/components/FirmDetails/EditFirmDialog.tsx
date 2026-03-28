@@ -52,7 +52,8 @@ export const EditFirmDialog = ({ firmId }: EditFirmDialogProps) => {
           ? new Date(firm.dateEstablished).toISOString().split("T")[0]
           : undefined,
         ceo: firm.ceo || "",
-        isPopular: firm.isPopular ? "true" : "false",
+        notes: firm.notes || "",
+        notesArabic: firm.notesArabic || "",
         affiliateLink: firm.affiliateLink || "",
         maxAllocation: firm.maxAllocation || 0,
         country: firm.country || "",
@@ -219,7 +220,8 @@ export const EditFirmDialog = ({ firmId }: EditFirmDialogProps) => {
       scaleupPlansArabic: data.scaleupPlansArabic,
       minimumTradingDays: data.minimumTradingDays,
       minimumTradingDaysArabic: data.minimumTradingDaysArabic,
-      isPopular: data.isPopular === "true" ? true : false,
+      notes: data.notes || "",
+      notesArabic: data.notesArabic || "",
 
       allocationRules: data.allocationRules,
       newsTradingAllowedRules: data.newsTradingAllowedRules,
