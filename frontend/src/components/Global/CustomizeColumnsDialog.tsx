@@ -96,7 +96,7 @@ export default function CustomizeColumnsDialog({
     <button
       type="button"
       className={cn(
-        "relative inline-flex items-center justify-center h-9 sm:h-9 rounded-full p-[2px] overflow-hidden bg-primary shrink-0",
+        "relative inline-flex items-center justify-center h-9 sm:h-9 rounded-full p-[2px] overflow-hidden bg-card discount-led-border shrink-0",
         isArabic && "font-semibold"
       )}
       onClick={() => (user ? setOpen(true) : setSignInOpen(true))}

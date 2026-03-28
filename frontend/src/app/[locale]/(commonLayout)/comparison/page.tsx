@@ -645,14 +645,14 @@ export default function ComparisonPage() {
                             {firm.title}
                           </h3>
                           <div className="space-y-1">
-                            <div className="text-sm text-primary font-semibold leading-tight truncate">
+                            <div dir="ltr" className="text-sm text-primary font-semibold leading-tight truncate">
                               {isArabic
                                 ? ch.challengeNameRel?.nameArabic ||
                                   ch.challengeNameRel?.name ||
                                   ""
                                 : ch.challengeNameRel?.name || ""}
                             </div>
-                            <div className="text-sm text-muted-foreground">
+                            <div dir="ltr" className="text-sm text-muted-foreground">
                               {STEPS_LABEL[ch.steps] || ch.steps}
                               {" · "}
                               <span className="text-foreground font-semibold">${formatK(ch.accountSize)}</span>
@@ -674,38 +674,42 @@ export default function ComparisonPage() {
                         {/* Col 3: Coupon + Discount */}
                         <div className="flex flex-col gap-0 items-stretch h-full overflow-hidden rounded-e-2xl">
                           {offer?.code && (
-                            <button
-                              type="button"
-                              onClick={() =>
-                                handleCopyCode(offer.code, firm.id)
-                              }
-                              className="flex-1 flex items-center justify-center gap-2 px-3 border-b border-border/20 bg-primary/5 hover:bg-primary/10 transition-colors cursor-pointer group"
-                            >
-                              <span className="text-base font-bold uppercase tracking-wider text-primary">
-                                {offer.code}
-                              </span>
-                              {isCopied ? (
-                                <CheckCheck className="size-3.5 text-green-500" />
-                              ) : (
-                                <Copy className="size-3.5 text-muted-foreground group-hover:text-primary transition-colors" />
-                              )}
-                            </button>
+                            <div className="flex-1 flex items-center justify-center px-3">
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  handleCopyCode(offer.code, firm.id)
+                                }
+                                className="flex items-center gap-2 border-2 border-dashed border-primary hover:bg-primary/10 px-3 py-1.5 rounded-full text-base transition-colors cursor-pointer group"
+                              >
+                                <span className="font-normal text-primary">{isArabic ? "كود" : "Code"}</span>
+                                <span className="h-5 border-r border-foreground/20"></span>
+                                <span className="font-semibold uppercase text-primary">
+                                  {offer.code}
+                                </span>
+                                {isCopied ? (
+                                  <CheckCheck className="size-3.5 text-green-500" />
+                                ) : (
+                                  <Copy className="size-3.5 text-muted-foreground group-hover:text-primary transition-colors" />
+                                )}
+                              </button>
+                            </div>
                           )}
 
                           {offer &&
                             (offer.offerPercentage > 0 ||
                               offer.discountType === "TEXT") && (
-                              <div className="flex-1 flex flex-col items-center justify-center gap-1 px-3 bg-gradient-to-b from-primary/90 to-primary/60">
-                                <span className="text-[11px] font-medium text-primary-foreground/80">
-                                  🎉 {isArabic ? "كود الخصم:" : "Discount Code:"}
-                                </span>
-                                <span className="text-lg font-extrabold text-primary-foreground tabular-nums leading-none">
+                              <div className="flex-1 flex items-center justify-center gap-2.5 px-3 bg-gradient-to-br from-primary/10 via-primary/5 to-transparent">
+                                <span className="text-2xl font-extrabold text-primary tabular-nums leading-none drop-shadow-sm">
                                   {offer.discountType === "TEXT"
                                     ? isArabic
                                       ? offer.discountTextArabic ||
                                         offer.discountText
                                       : offer.discountText
                                     : `${offer.offerPercentage}%`}
+                                </span>
+                                <span className="text-[10px] font-medium text-muted-foreground uppercase tracking-wide">
+                                  {isArabic ? "خصم" : "OFF"}
                                 </span>
                               </div>
                             )}

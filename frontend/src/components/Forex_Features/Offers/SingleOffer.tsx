@@ -248,7 +248,7 @@ export function CompanyHeader({
 }) {
   const isFutures = useIsFutures();
   return (
-    <div className="shrink-0 lg:w-1/3 lg:pr-6 flex flex-col lg:flex-row lg:self-stretch">
+    <div className="shrink-0 lg:w-1/3 lg:pe-6 flex flex-col lg:flex-row lg:self-stretch">
       {/* Company logo + name — centered on small screens, left-aligned on desktop */}
       <div className="w-full lg:w-[17.25rem] shrink-0 flex items-center justify-center lg:justify-start">
         <Link
@@ -289,15 +289,15 @@ export function CompanyHeader({
       {/* Dashed divider between logo and badge — desktop only */}
       {badge && (
         <div className="hidden lg:flex items-center">
-          <div className="relative border-r-2 border-foreground/20 border-dashed h-full">
-            <div className="absolute -top-5 w-9 h-10 rounded-full bg-background -left-4"></div>
-            <div className="absolute -bottom-5 w-9 h-10 rounded-full bg-background -left-4"></div>
+          <div className="relative border-e-2 border-foreground/20 border-dashed h-full">
+            <div className="absolute -top-5 w-9 h-10 rounded-full bg-background -start-4"></div>
+            <div className="absolute -bottom-5 w-9 h-10 rounded-full bg-background -start-4"></div>
           </div>
         </div>
       )}
       {/* Total sale badge — fixed width centered on desktop */}
       {badge && (
-        <div className="flex w-full lg:w-40 mx-auto lg:mx-0 items-center justify-center mt-4 lg:mt-0 lg:pl-10">
+        <div className="flex w-full lg:w-40 mx-auto lg:mx-0 items-center justify-center mt-4 lg:mt-0 lg:ps-10">
           {badge}
         </div>
       )}
@@ -480,9 +480,9 @@ export const OfferCard = ({
 }) => {
   const isArabic = useIsArabic();
   const isFutures = useIsFutures();
-  const codeBorderCls = isFutures ? "border-yellow-400 hover:bg-yellow-400/10" : "border-green-400 hover:bg-green-400/10";
-  const codeLabelCls = isFutures ? "text-yellow-500" : "text-green-500";
-  const copyIconHoverCls = isFutures ? "hover:text-yellow-500" : "hover:text-green-500";
+  const codeBorderCls = "border-primary hover:bg-primary/10";
+  const codeLabelCls = "text-primary";
+  const copyIconHoverCls = "hover:text-primary";
   const { isCopied, copyToClipboard } = useCopyToClipboard({
     successMessage: t("codeCopied") || "Code copied to clipboard!",
     errorMessage: t("copyFailed") || "Failed to copy code",
