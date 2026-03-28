@@ -145,8 +145,8 @@ export default function ChallengeRow({
     consistencyRule: (() => {
       const ch = challenge?.consistencyRuleChallenge;
       const fu = challenge?.consistencyRuleFunded;
-      const chLabel = ch ? String(ch) : <span className="text-xs md:text-sm text-muted-foreground">{t("none")}</span>;
-      const fuLabel = fu ? String(fu) : <span className="text-xs md:text-sm text-muted-foreground">{t("none")}</span>;
+      const chLabel = ch ? `${ch}%` : <span className="text-xs md:text-sm text-muted-foreground">{t("none")}</span>;
+      const fuLabel = fu ? `${fu}%` : <span className="text-xs md:text-sm text-muted-foreground">{t("none")}</span>;
       return (
         <TableCell key="consistencyRule" center className="text-sm md:text-base text-white">
           {chLabel} <span className="mx-2">|</span> {fuLabel}
