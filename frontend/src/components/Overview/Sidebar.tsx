@@ -8,6 +8,7 @@ import {
   Layers,
   Handshake,
   MessageSquare,
+  Mail,
 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -49,6 +50,12 @@ const navigation = [
     route: "/overview/contact-messages",
     icon: MessageSquare,
     roles: ["SUPER_ADMIN", "MODERATOR"],
+  },
+  {
+    labelKey: "newsletterSubscribers",
+    route: "/overview/newsletter-subscribers",
+    icon: Mail,
+    roles: ["SUPER_ADMIN"],
   },
   {
     labelKey: "home",
